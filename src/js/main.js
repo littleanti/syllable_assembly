@@ -13,8 +13,9 @@ if ('serviceWorker' in navigator) {
 
 // ── Saved preferences ────────────────────────────────────
 const _saved = loadProgress();
-let selectedLevel   = _saved.level   || 1;
-let selectedTapMode = _saved.tapMode || false;
+let selectedLevel      = _saved.level      || 1;
+let selectedTapMode    = _saved.tapMode    || false;
+let selectedCorrection = _saved.correctionMode || false;
 
 showTotalStars(_saved.totalStars || 0);
 
@@ -23,8 +24,9 @@ window.addEventListener('resize', () => checkOrientation());
 // ── Helpers ──────────────────────────────────────────────
 function saveSettings() {
   const s = loadProgress();
-  s.level   = selectedLevel;
-  s.tapMode = selectedTapMode;
+  s.level          = selectedLevel;
+  s.tapMode        = selectedTapMode;
+  s.correctionMode = selectedCorrection;
   saveProgress(s);
 }
 
@@ -32,18 +34,18 @@ function isPortraitBlocked() {
   return window.innerHeight > window.innerWidth && window.innerWidth < 600;
 }
 
-function launchGame(level, tapMode) {
+function launchGame(level, tapMode, corrMode) {
   if (isPortraitBlocked()) {
     showScreen('orientation');
     const resume = () => {
       if (!isPortraitBlocked()) {
         window.removeEventListener('resize', resume);
-        startGame(level, tapMode);
+        startGame(level, tapMode, corrMode);
       }
     };
     window.addEventListener('resize', resume);
   } else {
-    startGame(level, tapMode);
+    startGame(level, tapMode, corrMode);
   }
 }
 
@@ -53,7 +55,7 @@ document.querySelectorAll('.level-btn').forEach(btn => {
     selectedLevel = Number(btn.dataset.level);
     saveSettings();
     await audioUnlock();
-    launchGame(selectedLevel, selectedTapMode);
+    launchGame(selectedLevel, selectedTapMode, selectedCorrection);
   });
 });
 
@@ -61,11 +63,17 @@ document.querySelectorAll('.level-btn').forEach(btn => {
 document.getElementById('btn-open-settings').addEventListener('click', () => {
   const tapToggle = document.getElementById('toggle-tap');
   if (tapToggle) tapToggle.checked = selectedTapMode;
+  const corrToggle = document.getElementById('toggle-correction');
+  if (corrToggle) corrToggle.checked = selectedCorrection;
   showScreen('settings');
 });
 
 document.getElementById('toggle-tap').addEventListener('change', e => {
   selectedTapMode = e.target.checked;
+});
+
+document.getElementById('toggle-correction').addEventListener('change', e => {
+  selectedCorrection = e.target.checked;
 });
 
 document.getElementById('btn-close-settings').addEventListener('click', () => {
@@ -81,7 +89,7 @@ document.getElementById('btn-settings-done').addEventListener('click', () => {
 // ── Play screen buttons ──────────────────────────────────
 document.getElementById('btn-retry').addEventListener('click', () => {
   const s = getCurrentSettings();
-  startGame(s.level, s.tapMode);
+  startGame(s.level, s.tapMode, s.correctionMode);
   showTotalStars(loadProgress().totalStars || 0);
 });
 

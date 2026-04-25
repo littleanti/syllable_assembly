@@ -43,6 +43,10 @@ export function advanceLesson() {
   state.lessonIdx++;
 }
 
+export function skipLesson() {
+  state.lessonIdx++;
+}
+
 export function isLessonComplete() {
   return state.lessonIdx >= state.lessonQueue.length;
 }

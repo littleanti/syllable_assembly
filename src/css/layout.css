@@ -31,6 +31,12 @@
     "jong";
   grid-template-columns: 1fr;
   max-width: calc(var(--slot-size) + 40px);
+  row-gap: 20px;
+}
+
+/* Hide slot labels in horizontal layout — they'd overlap the slot below */
+#dock.shape-horizontal .slot::before {
+  display: none;
 }
 
 /* Hide jong row when not used */

@@ -28,9 +28,21 @@
   <div class="game-subtitle">자모를 모아 글자를 만들어요!</div>
   <div id="total-stars-display" class="total-stars-display"></div>
 
-  <div id="current-level-display" class="current-level-display">레벨 1 · 받침 없음 · 홑자음</div>
-
-  <button id="btn-start" class="btn-primary">시작하기 ▶</button>
+  <p class="level-label">레벨을 선택하세요</p>
+  <div class="level-buttons">
+    <button class="level-btn level-btn-1" data-level="1">
+      🌱<span class="level-name">레벨 1</span><small>받침 없음</small>
+    </button>
+    <button class="level-btn level-btn-2" data-level="2">
+      🌿<span class="level-name">레벨 2</span><small>받침 있음</small>
+    </button>
+    <button class="level-btn level-btn-3" data-level="3">
+      🌳<span class="level-name">레벨 3</span><small>쌍자음</small>
+    </button>
+    <button class="level-btn level-btn-4" data-level="4">
+      🔥<span class="level-name">레벨 4</span><small>겹받침</small>
+    </button>
+  </div>
   <button id="btn-open-settings" class="btn-settings">⚙️ 설정</button>
 </div>
 
@@ -43,34 +55,19 @@
 
   <div class="settings-body">
     <div class="settings-section">
-      <div class="section-label">📊 레벨 선택</div>
-      <div class="level-chip-row">
-        <button class="level-chip active" data-level="1">
-          <span class="level-chip-num">레벨 1</span>
-          <span class="level-chip-desc">받침 없음 · 홑자음</span>
-        </button>
-        <button class="level-chip" data-level="2">
-          <span class="level-chip-num">레벨 2</span>
-          <span class="level-chip-desc">받침 있음 · 홑자음</span>
-        </button>
-        <button class="level-chip" data-level="3">
-          <span class="level-chip-num">레벨 3</span>
-          <span class="level-chip-desc">받침 없음 · 쌍자음</span>
-        </button>
-        <button class="level-chip" data-level="4">
-          <span class="level-chip-num">레벨 4</span>
-          <span class="level-chip-desc">받침 있음 · 쌍자음+겹받침</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="settings-section">
       <label class="settings-toggle-row">
         <div>
           <div class="settings-toggle-label">탭-탭 모드</div>
           <div class="settings-toggle-hint">드래그 대신 탭으로 자모 선택</div>
         </div>
         <input type="checkbox" id="toggle-tap" class="settings-checkbox">
+      </label>
+      <label class="settings-toggle-row">
+        <div>
+          <div class="settings-toggle-label">오답 수정 모드</div>
+          <div class="settings-toggle-hint">틀려도 다시 풀 수 있어요</div>
+        </div>
+        <input type="checkbox" id="toggle-correction" class="settings-checkbox">
       </label>
     </div>
   </div>

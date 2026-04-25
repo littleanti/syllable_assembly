@@ -56,3 +56,13 @@ button {
 @supports (height: 100dvh) {
   body { height: 100dvh; }
 }
+
+@keyframes wrong-shake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-8px); }
+  40%      { transform: translateX(8px); }
+  60%      { transform: translateX(-5px); }
+  80%      { transform: translateX(5px); }
+}
+
+.wrong-shake { animation: wrong-shake 0.4s ease; }

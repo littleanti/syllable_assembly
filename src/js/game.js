@@ -9,7 +9,7 @@ import {
 import { speak, speakPartial } from './audio.js';
 import { DragManager } from './pointer.js';
 import { TapManager } from './tap.js';
-import { initLesson, currentTarget, advanceLesson, isLessonComplete, buildPalette } from './lesson.js';
+import { initLesson, currentTarget, advanceLesson, skipLesson, isLessonComplete, buildPalette } from './lesson.js';
 import { loadProgress, saveProgress } from './storage.js';
 import { REWARD_DELAY_MS, ROUND_COUNT } from './config.js';
 import { sleep } from './utils.js';
@@ -20,12 +20,14 @@ const tap  = new TapManager();
 
 let busy = false;
 let dragInitialized = false;
-let currentLevel   = 1;
-let currentTapMode = false;
+let currentLevel      = 1;
+let currentTapMode    = false;
+let correctionMode    = false;
 
-export function startGame(level = 1, tapMode = false) {
-  currentLevel   = level;
-  currentTapMode = tapMode;
+export function startGame(level = 1, tapMode = false, corrMode = false) {
+  currentLevel      = level;
+  currentTapMode    = tapMode;
+  correctionMode    = corrMode;
 
   initLesson(level);
   showScreen('play');
@@ -57,7 +59,7 @@ export function stopGame() {
 }
 
 export function getCurrentSettings() {
-  return { level: currentLevel, tapMode: currentTapMode };
+  return { level: currentLevel, tapMode: currentTapMode, correctionMode };
 }
 
 function startRound() {
@@ -114,6 +116,21 @@ async function onJamoPlaced(char, category, slotName) {
   const { cho, jung, jong, hasJong } = state.target;
   const b = state.board;
 
+  // Correction mode: immediately reject wrong placement
+  if (correctionMode) {
+    const correctChar = { cho, jung, jong }[slotName];
+    if (char !== correctChar) {
+      const slotEl = document.querySelector(`[data-slot="${slotName}"]`);
+      if (slotEl) {
+        slotEl.classList.add('reject-flash');
+        setTimeout(() => slotEl.classList.remove('reject-flash'), 380);
+      }
+      state.board[slotName] = null;
+      updateSlotDisplay(slotName, null);
+      return;
+    }
+  }
+
   if (b.cho && !b.jung) {
     speakPartial(b.cho);
   } else if (b.cho && b.jung) {
@@ -135,6 +152,15 @@ async function onJamoPlaced(char, category, slotName) {
 
   if (choOk && jungOk && jongOk && b.cho && b.jung) {
     await handleSuccess();
+    return;
+  }
+
+  // Default mode: all slots filled but wrong → skip to next
+  if (!correctionMode) {
+    const allFilled = b.cho && b.jung && (!hasJong || b.jong);
+    if (allFilled) {
+      await handleFailure();
+    }
   }
 }
 
@@ -150,6 +176,24 @@ async function handleSuccess() {
   saveProgress(saved);
 
   await sleep(REWARD_DELAY_MS);
+
+  if (isLessonComplete()) {
+    showEndScreen(state.stars, ROUND_COUNT);
+  } else {
+    startRound();
+  }
+}
+
+async function handleFailure() {
+  busy = true;
+  const dockEl = document.getElementById('dock');
+  dockEl.classList.add('wrong-shake');
+  dockEl.addEventListener('animationend', () => dockEl.classList.remove('wrong-shake'), { once: true });
+
+  await sleep(700);
+
+  skipLesson();
+  updateProgress(state.stars, ROUND_COUNT);
 
   if (isLessonComplete()) {
     showEndScreen(state.stars, ROUND_COUNT);
