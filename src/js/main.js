@@ -11,29 +11,16 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// ── Helpers ──────────────────────────────────────────────
-const LEVEL_LABELS = {
-  1: '레벨 1 · 받침 없음 · 홑자음',
-  2: '레벨 2 · 받침 있음 · 홑자음',
-  3: '레벨 3 · 받침 없음 · 쌍자음',
-  4: '레벨 4 · 받침 있음 · 쌍자음+겹받침',
-};
-
 // ── Saved preferences ────────────────────────────────────
 const _saved = loadProgress();
 let selectedLevel   = _saved.level   || 1;
 let selectedTapMode = _saved.tapMode || false;
 
 showTotalStars(_saved.totalStars || 0);
-updateLevelDisplay();
 
 window.addEventListener('resize', () => checkOrientation());
 
-function updateLevelDisplay() {
-  const el = document.getElementById('current-level-display');
-  if (el) el.textContent = LEVEL_LABELS[selectedLevel] || '';
-}
-
+// ── Helpers ──────────────────────────────────────────────
 function saveSettings() {
   const s = loadProgress();
   s.level   = selectedLevel;
@@ -60,30 +47,21 @@ function launchGame(level, tapMode) {
   }
 }
 
-// ── Start screen buttons ─────────────────────────────────
-document.getElementById('btn-start').addEventListener('click', async () => {
-  await audioUnlock();
-  launchGame(selectedLevel, selectedTapMode);
-});
-
-document.getElementById('btn-open-settings').addEventListener('click', () => {
-  // Sync UI to current settings before opening
-  document.querySelectorAll('.level-chip').forEach(btn => {
-    btn.classList.toggle('active', Number(btn.dataset.level) === selectedLevel);
+// ── Level buttons (home screen) ──────────────────────────
+document.querySelectorAll('.level-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    selectedLevel = Number(btn.dataset.level);
+    saveSettings();
+    await audioUnlock();
+    launchGame(selectedLevel, selectedTapMode);
   });
-  const tapToggle = document.getElementById('toggle-tap');
-  if (tapToggle) tapToggle.checked = selectedTapMode;
-  showScreen('settings');
 });
 
 // ── Settings screen ──────────────────────────────────────
-document.querySelectorAll('.level-chip').forEach(btn => {
-  btn.addEventListener('click', () => {
-    selectedLevel = Number(btn.dataset.level);
-    document.querySelectorAll('.level-chip').forEach(b =>
-      b.classList.toggle('active', b === btn)
-    );
-  });
+document.getElementById('btn-open-settings').addEventListener('click', () => {
+  const tapToggle = document.getElementById('toggle-tap');
+  if (tapToggle) tapToggle.checked = selectedTapMode;
+  showScreen('settings');
 });
 
 document.getElementById('toggle-tap').addEventListener('change', e => {
@@ -92,13 +70,11 @@ document.getElementById('toggle-tap').addEventListener('change', e => {
 
 document.getElementById('btn-close-settings').addEventListener('click', () => {
   saveSettings();
-  updateLevelDisplay();
   showScreen('start');
 });
 
 document.getElementById('btn-settings-done').addEventListener('click', () => {
   saveSettings();
-  updateLevelDisplay();
   showScreen('start');
 });
 
