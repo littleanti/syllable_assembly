@@ -30,14 +30,10 @@
     "jung"
     "jong";
   grid-template-columns: 1fr;
-  width: calc(var(--slot-size) + 40px);
+  /* +44px = 20px padding × 2 + 2px border × 2, so content = slot-size exactly */
+  width: calc(var(--slot-size) + 44px);
   justify-items: center;
-}
-
-/* Horizontal labels go above slot (bottom:-22px would enter the slot below) */
-#dock.shape-horizontal .slot::before {
-  bottom: auto;
-  top: -14px;
+  row-gap: 24px;
 }
 
 /* Hide jong row when not used */
