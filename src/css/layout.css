@@ -1,7 +1,7 @@
 /* ── Assembly dock ─────────────────────────────────────── */
 #dock {
   display: grid;
-  gap: 10px;
+  gap: 16px;
   padding: 20px;
   background: var(--color-surface2);
   border: 2px solid var(--color-border);
@@ -32,12 +32,12 @@
   grid-template-columns: 1fr;
   width: calc(var(--slot-size) + 40px);
   justify-items: center;
-  row-gap: 20px;
 }
 
-/* Hide slot labels in horizontal layout — they'd overlap the slot below */
+/* Horizontal labels go above slot (bottom:-22px would enter the slot below) */
 #dock.shape-horizontal .slot::before {
-  display: none;
+  bottom: auto;
+  top: -14px;
 }
 
 /* Hide jong row when not used */

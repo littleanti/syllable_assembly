@@ -444,8 +444,16 @@
 
 #btn-speak:active { transform: scale(0.9); }
 
-/* Partial feedback message */
+/* Partial feedback message — fixed above palette so layout never covers it */
 .partial-feedback {
+  position: fixed;
+  bottom: calc(var(--footer-h) + 16px);
+  left: 0;
+  right: 0;
+  width: fit-content;
+  max-width: calc(100% - 32px);
+  margin: 0 auto;
+  z-index: 200;
   font-size: 1.05rem;
   font-weight: 700;
   color: var(--color-jong);
