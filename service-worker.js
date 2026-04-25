@@ -1,7 +1,9 @@
-const CACHE = 'syllable-assembly-v1';
+const CACHE = 'syllable-assembly-v2';
 const ASSETS = [
   './',
   './index.html',
+  './favicon.svg',
+  './icon.svg',
   './src/css/tokens.css',
   './src/css/base.css',
   './src/css/layout.css',
@@ -18,7 +20,6 @@ const ASSETS = [
   './src/js/ui.js',
   './src/js/lesson.js',
   './src/js/tap.js',
-  './src/js/rhythm.js',
   './src/js/game.js',
   './src/js/main.js',
   './src/data/jamo.js',

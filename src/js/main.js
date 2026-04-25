@@ -11,6 +11,14 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+// ── Helpers ──────────────────────────────────────────────
+const LEVEL_LABELS = {
+  1: '레벨 1 · 받침 없음 · 홑자음',
+  2: '레벨 2 · 받침 있음 · 홑자음',
+  3: '레벨 3 · 받침 없음 · 쌍자음',
+  4: '레벨 4 · 받침 있음 · 쌍자음+겹받침',
+};
+
 // ── Saved preferences ────────────────────────────────────
 const _saved = loadProgress();
 let selectedLevel   = _saved.level   || 1;
@@ -20,14 +28,6 @@ showTotalStars(_saved.totalStars || 0);
 updateLevelDisplay();
 
 window.addEventListener('resize', () => checkOrientation());
-
-// ── Helpers ──────────────────────────────────────────────
-const LEVEL_LABELS = {
-  1: '레벨 1 · 받침 없음 · 홑자음',
-  2: '레벨 2 · 받침 있음 · 홑자음',
-  3: '레벨 3 · 받침 없음 · 쌍자음',
-  4: '레벨 4 · 받침 있음 · 쌍자음+겹받침',
-};
 
 function updateLevelDisplay() {
   const el = document.getElementById('current-level-display');
