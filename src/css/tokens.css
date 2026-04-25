@@ -1,0 +1,71 @@
+:root {
+  /* ── Base palette (matches 1_chosung_quiz) ── */
+  --cream:       #FFF6E4;
+  --coral:       #FF7757;
+  --coral-dark:  #d45a40;
+  --mint:        #6BCAB8;
+  --mint-dark:   #4fa192;
+  --navy:        #2D3047;
+  --yellow:      #FFD166;
+  --yellow-dark: #c9a84c;
+  --gray:        #E5E1D6;
+  --gray-dark:   #ccc8be;
+
+  /* ── Semantic colors ── */
+  --color-bg:        var(--cream);
+  --color-surface:   #FFFFFF;
+  --color-surface2:  #F5EDD8;
+  --color-border:    var(--gray);
+  --color-accent:    var(--coral);
+  --color-text:      var(--navy);
+  --color-text-dim:  #6b6e82;
+
+  /* ── Jamo block colors (light-theme friendly) ── */
+  --color-cho:       #d44030;   /* dark coral — consonant initial */
+  --color-cho-bg:    #fff0ed;
+  --color-jung:      #2e82b5;   /* ocean blue — vowel */
+  --color-jung-bg:   #e8f4fd;
+  --color-jong:      #b07a00;   /* dark amber — consonant final */
+  --color-jong-bg:   #fff8e0;
+
+  /* ── Slot ── */
+  --slot-size:       96px;
+  --slot-radius:     16px;
+  --slot-border:     2px dashed var(--color-border);
+  --slot-filled-bg:  #f5f0e8;
+
+  /* ── Block ── */
+  --block-size:      72px;
+  --block-radius:    14px;
+  --block-font:      2.4rem;
+
+  /* ── Animation ── */
+  --spring-ms:  280ms;
+  --reward-ms:  1400ms;
+
+  /* ── Layout ── */
+  --header-h:   56px;
+  --footer-h:   160px;
+}
+
+/* ── Compact layout for small landscape phones ───── */
+@media (max-height: 480px) {
+  :root {
+    --slot-size:  68px;
+    --block-size: 54px;
+    --block-font: 1.7rem;
+    --header-h:   44px;
+    --footer-h:   108px;
+  }
+}
+
+/* ── Portrait tablet layout (≥600px wide) ─────────── */
+@media (orientation: portrait) and (min-width: 600px) {
+  :root {
+    --slot-size:   112px;
+    --block-size:  84px;
+    --block-font:  2.8rem;
+    --header-h:    60px;
+    --footer-h:    200px;
+  }
+}

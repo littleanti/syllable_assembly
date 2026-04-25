@@ -1,0 +1,496 @@
+/* ── Shared screen wrapper ─────────────────────────────── */
+.screen {
+  width: 100%; height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 24px;
+}
+
+/* ── Start screen ──────────────────────────────────────── */
+#screen-start {
+  background: linear-gradient(160deg, #fff6e4 0%, #ffe8d6 100%);
+}
+
+.start-icon {
+  width: 96px;
+  height: 96px;
+  animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 4px 12px rgba(255,119,87,0.25));
+}
+
+.game-title {
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  text-align: center;
+  line-height: 1.2;
+  color: var(--navy);
+  animation: float 3s ease-in-out infinite;
+}
+
+.game-subtitle {
+  font-size: clamp(0.9rem, 3vw, 1.2rem);
+  color: var(--color-text-dim);
+  text-align: center;
+}
+
+.btn-primary {
+  background: var(--coral);
+  color: #fff;
+  font-size: clamp(1.2rem, 3.5vw, 1.8rem);
+  font-weight: 700;
+  padding: 16px 44px;
+  border-radius: 60px;
+  box-shadow: 0 6px 20px rgba(255,119,87,0.4);
+  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+  min-width: 180px;
+  min-height: 58px;
+}
+
+.btn-primary:active {
+  transform: scale(0.96);
+  background: var(--coral-dark);
+  box-shadow: 0 3px 10px rgba(255,119,87,0.3);
+}
+
+/* ── Current level display on start screen ─────────────── */
+.current-level-display {
+  font-size: 0.95rem;
+  color: var(--color-accent);
+  background: rgba(255,119,87,0.08);
+  border: 1.5px solid rgba(255,119,87,0.25);
+  border-radius: 20px;
+  padding: 6px 18px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.btn-settings {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-dim);
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: 24px;
+  padding: 10px 24px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.btn-settings:active { background: var(--color-surface2); color: var(--color-text); }
+
+/* ── Settings screen ────────────────────────────────────── */
+#screen-settings {
+  justify-content: flex-start;
+  padding: 0;
+  gap: 0;
+  background: var(--color-bg);
+}
+
+.settings-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.settings-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.close-btn {
+  font-size: 1.2rem;
+  color: var(--color-text-dim);
+  background: transparent;
+  border: 1.5px solid var(--color-border);
+  border-radius: 8px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.close-btn:active { color: var(--color-accent); }
+
+.settings-body {
+  flex: 1;
+  width: 100%;
+  overflow-y: auto;
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.section-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-text-dim);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.level-chip-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.level-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 14px 16px;
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  text-align: left;
+}
+
+.level-chip.active {
+  background: rgba(255,119,87,0.1);
+  border-color: var(--color-accent);
+}
+
+.level-chip-num {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.level-chip.active .level-chip-num { color: var(--color-accent); }
+
+.level-chip-desc {
+  font-size: 0.78rem;
+  color: var(--color-text-dim);
+  line-height: 1.3;
+}
+
+.settings-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  background: var(--color-surface);
+  border-radius: 14px;
+  border: 1.5px solid var(--color-border);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.settings-toggle-row:has(input:checked) {
+  border-color: var(--color-accent);
+  background: rgba(255,119,87,0.06);
+}
+
+.settings-toggle-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.settings-toggle-hint {
+  font-size: 0.82rem;
+  color: var(--color-text-dim);
+  margin-top: 2px;
+}
+
+.settings-checkbox {
+  width: 24px;
+  height: 24px;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.settings-footer {
+  width: 100%;
+  padding: 16px 24px;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: center;
+}
+
+/* ── Start screen options ──────────────────────────────── */
+.total-stars-display {
+  font-size: 0.95rem;
+  color: var(--color-text-dim);
+  min-height: 1.4em;
+  letter-spacing: 1px;
+}
+
+.options-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.option-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--color-text-dim);
+  padding: 12px 18px;
+  background: var(--color-surface);
+  border-radius: 14px;
+  border: 1.5px solid var(--color-border);
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  user-select: none;
+}
+
+.option-toggle:has(input:checked) {
+  border-color: var(--color-accent);
+  background: rgba(255,119,87,0.08);
+  color: var(--color-text);
+}
+
+.option-toggle input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ── Orientation screen ────────────────────────────────── */
+#screen-orientation {
+  background: var(--color-bg);
+  gap: 32px;
+}
+
+.rotation-icon {
+  font-size: 5rem;
+  animation: float 1.5s ease-in-out infinite;
+}
+
+.rotation-text {
+  font-size: 1.4rem;
+  text-align: center;
+  color: var(--color-text);
+}
+
+/* ── Play screen ───────────────────────────────────────── */
+#screen-play {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+  padding: 0;
+  gap: 0;
+  height: 100%;
+}
+
+/* Progress header */
+#play-header {
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+#progress-text {
+  font-size: 1rem;
+  color: var(--color-text-dim);
+}
+
+#stars-inline {
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+}
+
+.btn-quit {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-dim);
+  background: transparent;
+  border: 1.5px solid var(--color-border);
+  border-radius: 8px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  flex-shrink: 0;
+}
+.btn-quit:active { color: var(--color-accent); border-color: var(--color-accent); }
+
+.progress-bar-wrap {
+  flex: 1;
+  height: 6px;
+  background: var(--color-border);
+  border-radius: 3px;
+  margin: 0 16px;
+  overflow: hidden;
+}
+
+#progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--mint), var(--coral));
+  border-radius: 3px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+/* Central play area */
+#play-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 16px;
+  overflow: hidden;
+  background: linear-gradient(160deg, #fff6e4 0%, #ffeedd 100%);
+}
+
+/* Target hint card */
+#target-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: 20px;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+#target-card:active { background: var(--color-surface2); }
+
+.target-label {
+  font-size: 0.85rem;
+  color: var(--color-text-dim);
+}
+
+#target-display {
+  font-size: 3.2rem;
+  font-weight: 900;
+  color: var(--navy);
+  min-width: 52px;
+  text-align: center;
+}
+
+#btn-speak {
+  font-size: 1.6rem;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: transform 0.1s;
+}
+
+#btn-speak:active { transform: scale(0.9); }
+
+/* Partial feedback message */
+.partial-feedback {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-jong);
+  text-align: center;
+  padding: 8px 18px;
+  background: rgba(245,166,35,0.1);
+  border: 1.5px solid rgba(245,166,35,0.3);
+  border-radius: 12px;
+  animation: pop-in 0.3s ease both;
+}
+
+/* Reward overlay */
+#reward-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 900;
+}
+
+#reward-overlay .reward-emoji {
+  font-size: 6rem;
+  opacity: 0;
+}
+
+#reward-overlay.show .reward-emoji {
+  animation: overlay-fade 1.2s ease forwards;
+}
+
+/* ── Small landscape phones (iPhone SE landscape 568×320) ── */
+@media (max-height: 480px) {
+  #play-main { gap: 6px; padding: 6px 12px; }
+  #target-card { padding: 6px 14px; }
+  #target-display { font-size: 2rem; min-width: 38px; }
+  #dock { gap: 6px; padding: 12px; }
+  .partial-feedback { padding: 4px 12px; font-size: 0.9rem; }
+}
+
+/* ── Portrait tablet (≥600px wide) ─────────────────────── */
+@media (orientation: portrait) and (min-width: 600px) {
+  #play-main { gap: 28px; padding: 24px; }
+  #target-card { padding: 16px 32px; }
+  #target-display { font-size: 4rem; min-width: 64px; }
+  #dock { gap: 14px; padding: 24px; }
+}
+
+/* ── End screen ────────────────────────────────────────── */
+#screen-end {
+  background: linear-gradient(160deg, #fff6e4 0%, #ffe8d6 100%);
+  gap: 28px;
+}
+
+.end-title {
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  color: var(--navy);
+}
+
+#end-stars {
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  letter-spacing: 4px;
+}
+
+#end-message {
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
+  color: var(--color-text-dim);
+  text-align: center;
+}
+
+.end-buttons {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn-secondary {
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: clamp(1rem, 3vw, 1.3rem);
+  font-weight: 700;
+  padding: 14px 36px;
+  border-radius: 60px;
+  border: 2px solid var(--color-border);
+  cursor: pointer;
+  transition: transform 0.15s, background 0.15s;
+  min-height: 56px;
+}
+.btn-secondary:active { transform: scale(0.96); background: var(--color-surface2); }

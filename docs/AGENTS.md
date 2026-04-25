@@ -1,0 +1,27 @@
+<!-- Parent: ../AGENTS.md -->
+<!-- Generated: 2026-04-25 | Updated: 2026-04-25 -->
+
+# docs
+
+## Purpose
+`2_syllable_assembly` 게임의 기획 및 설계 문서. 실제 코드에는 영향을 주지 않으며, 제품 요구사항·기술 설계·개발 계획을 기록한다. 본 게임은 **설계 단계**이므로 본 문서들이 구현 전 합의의 기준이 된다.
+
+## Key Files
+
+| File | Description |
+|------|-------------|
+| `PRD.md` | 제품 요구사항 문서 (Product Requirements Document) |
+| `TRD.md` | 기술 설계 문서. §8에 수동 테스트 체크리스트 포함 |
+| `PLAN.md` | 개발 계획 및 진행 상황 (마일스톤 기반) |
+
+## For AI Agents
+
+### Working In This Directory
+- 본 게임은 **미구현 상태** — 코드보다 문서가 선행한다.
+- 부모 `../AGENTS.md` 의 게임 메커닉/모바일 정책이 1차 출처(SoT)이며, 본 docs는 이를 PRD/TRD/PLAN 형식으로 분해한 산출물.
+- 자모 결합 알고리즘, 모음 형태 분기 같은 핵심 공식은 TRD §3에 명시.
+- 수동 테스트 체크리스트는 `TRD.md` §8을 기준으로 한다.
+- 자동화 테스트 런너 없음 — 새 기능 추가 시 TRD에 체크리스트 항목도 추가 권장.
+- 인접 단계(`../1_chosung_quiz/docs/`, `../3_word_network/docs/`)와 데이터/컴포넌트 호환성 유지.
+
+<!-- MANUAL: -->

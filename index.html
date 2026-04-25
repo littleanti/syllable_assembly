@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#FFF6E4">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>음절 조립소</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="src/css/tokens.css">
+  <link rel="stylesheet" href="src/css/base.css">
+  <link rel="stylesheet" href="src/css/layout.css">
+  <link rel="stylesheet" href="src/css/blocks.css">
+  <link rel="stylesheet" href="src/css/screens.css">
+</head>
+<body>
+
+<!-- ── Start screen ─────────────────────────────────── -->
+<div id="screen-start" class="screen">
+  <img src="./favicon.svg" class="start-icon" alt="">
+  <div class="game-title">음절 조립소</div>
+  <div class="game-subtitle">자모를 모아 글자를 만들어요!</div>
+  <div id="total-stars-display" class="total-stars-display"></div>
+
+  <div id="current-level-display" class="current-level-display">레벨 1 · 받침 없음 · 홑자음</div>
+
+  <button id="btn-start" class="btn-primary">시작하기 ▶</button>
+  <button id="btn-open-settings" class="btn-settings">⚙️ 설정</button>
+</div>
+
+<!-- ── Settings screen ──────────────────────────────── -->
+<div id="screen-settings" class="screen" hidden>
+  <div class="settings-header">
+    <h2 class="settings-title">⚙️ 설정</h2>
+    <button id="btn-close-settings" class="close-btn">✕</button>
+  </div>
+
+  <div class="settings-body">
+    <div class="settings-section">
+      <div class="section-label">📊 레벨 선택</div>
+      <div class="level-chip-row">
+        <button class="level-chip active" data-level="1">
+          <span class="level-chip-num">레벨 1</span>
+          <span class="level-chip-desc">받침 없음 · 홑자음</span>
+        </button>
+        <button class="level-chip" data-level="2">
+          <span class="level-chip-num">레벨 2</span>
+          <span class="level-chip-desc">받침 있음 · 홑자음</span>
+        </button>
+        <button class="level-chip" data-level="3">
+          <span class="level-chip-num">레벨 3</span>
+          <span class="level-chip-desc">받침 없음 · 쌍자음</span>
+        </button>
+        <button class="level-chip" data-level="4">
+          <span class="level-chip-num">레벨 4</span>
+          <span class="level-chip-desc">받침 있음 · 쌍자음+겹받침</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <label class="settings-toggle-row">
+        <div>
+          <div class="settings-toggle-label">탭-탭 모드</div>
+          <div class="settings-toggle-hint">드래그 대신 탭으로 자모 선택</div>
+        </div>
+        <input type="checkbox" id="toggle-tap" class="settings-checkbox">
+      </label>
+    </div>
+  </div>
+
+  <div class="settings-footer">
+    <button id="btn-settings-done" class="btn-primary">완료 ✓</button>
+  </div>
+</div>
+
+<!-- ── Orientation prompt ───────────────────────────── -->
+<div id="screen-orientation" class="screen" hidden>
+  <div class="rotation-icon">📱</div>
+  <div class="rotation-text">가로로 돌려주세요<br>↔️</div>
+</div>
+
+<!-- ── Play screen ──────────────────────────────────── -->
+<div id="screen-play" class="screen" hidden>
+
+  <header id="play-header">
+    <button id="btn-quit" class="btn-quit" aria-label="홈으로">✕</button>
+    <span id="progress-text">0 / 10</span>
+    <div class="progress-bar-wrap">
+      <div id="progress-fill"></div>
+    </div>
+    <span id="stars-inline"></span>
+  </header>
+
+  <main id="play-main">
+
+    <!-- Target hint card -->
+    <button id="target-card" aria-label="목표 음절 다시 듣기">
+      <span class="target-label">목표</span>
+      <span id="target-display">?</span>
+      <span id="btn-speak">🔊</span>
+    </button>
+
+    <!-- Assembly dock -->
+    <div id="dock" class="shape-vertical">
+      <div class="slot" data-slot="cho"  data-label="초성" aria-label="초성 자리"></div>
+      <div class="slot" data-slot="jung" data-label="중성" aria-label="중성 자리"></div>
+      <div class="slot" data-slot="jong" data-label="받침" aria-label="받침 자리" hidden></div>
+      <div id="assembled-display" class="assembled-display"></div>
+    </div>
+
+    <!-- Partial correct feedback -->
+    <div id="partial-feedback" class="partial-feedback" hidden></div>
+
+  </main>
+
+  <!-- Jamo palette -->
+  <footer id="palette" aria-label="자모 블록"></footer>
+
+</div>
+
+<!-- ── Reward overlay ───────────────────────────────── -->
+<div id="reward-overlay" hidden aria-hidden="true">
+  <div class="reward-emoji">⭐</div>
+</div>
+
+<!-- ── End screen ───────────────────────────────────── -->
+<div id="screen-end" class="screen" hidden>
+  <div class="end-title">완성! 🎉</div>
+  <div id="end-stars"></div>
+  <div id="end-message"></div>
+  <div class="end-buttons">
+    <button id="btn-retry" class="btn-primary">다시 하기 🔄</button>
+    <button id="btn-home"  class="btn-secondary">🏠 홈으로</button>
+  </div>
+</div>
+
+<script type="module" src="src/js/main.js"></script>
+</body>
+</html>

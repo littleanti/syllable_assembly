@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <!-- Warm cream background -->
+  <rect width="192" height="192" rx="40" fill="#FFF6E4"/>
+  <!-- Cho block top-left (coral) -->
+  <rect x="14" y="14" width="78" height="78" rx="18" fill="#fff0ed" stroke="#d44030" stroke-width="4"/>
+  <text x="53" y="67" text-anchor="middle" font-size="46" font-family="sans-serif" font-weight="900" fill="#d44030">ㄱ</text>
+  <!-- Jung block top-right (blue) -->
+  <rect x="100" y="14" width="78" height="78" rx="18" fill="#e8f4fd" stroke="#2e82b5" stroke-width="4"/>
+  <text x="139" y="67" text-anchor="middle" font-size="46" font-family="sans-serif" font-weight="900" fill="#2e82b5">ㅏ</text>
+  <!-- Jong block bottom full-width (amber) -->
+  <rect x="14" y="106" width="164" height="72" rx="18" fill="#fff8e0" stroke="#b07a00" stroke-width="4"/>
+  <text x="96" y="155" text-anchor="middle" font-size="46" font-family="sans-serif" font-weight="900" fill="#b07a00">ㄴ</text>
+</svg>

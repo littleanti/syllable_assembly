@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"cd \\\"D:\\\\yoon\\\\codes\\\\hangul_games\\\\2_syllable_assembly\\\" && git status 2>&1\",\"description\":\"Check git status\"}",
+  "error": "Exit code 128\nfatal: not a git repository (or any of the parent directories): .git",
+  "timestamp": "2026-04-25T12:46:42.367Z",
+  "retry_count": 1
+}
