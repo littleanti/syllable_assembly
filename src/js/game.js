@@ -6,7 +6,7 @@ import {
   showReward, showEndScreen, updateProgress,
   showPartialFeedback, hidePartialFeedback,
 } from './ui.js';
-import { speak, speakPartial } from './audio.js';
+import { speak, speakPartial, playCorrect, playIncorrect } from './audio.js';
 import { DragManager } from './pointer.js';
 import { TapManager } from './tap.js';
 import { initLesson, currentTarget, advanceLesson, skipLesson, isLessonComplete, buildPalette } from './lesson.js';
@@ -166,6 +166,7 @@ async function onJamoPlaced(char, category, slotName) {
 
 async function handleSuccess() {
   busy = true;
+  playCorrect();
   speak(state.target.syllable, 0.75);
   showReward();
   advanceLesson();
@@ -186,6 +187,7 @@ async function handleSuccess() {
 
 async function handleFailure() {
   busy = true;
+  playIncorrect();
   const dockEl = document.getElementById('dock');
   dockEl.classList.add('wrong-shake');
   dockEl.addEventListener('animationend', () => dockEl.classList.remove('wrong-shake'), { once: true });

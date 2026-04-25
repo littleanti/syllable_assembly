@@ -30,7 +30,8 @@
     "jung"
     "jong";
   grid-template-columns: 1fr;
-  max-width: calc(var(--slot-size) + 40px);
+  width: calc(var(--slot-size) + 40px);
+  justify-items: center;
   row-gap: 20px;
 }
 

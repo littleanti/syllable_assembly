@@ -53,3 +53,32 @@ export function speakJamo(char) {
 export function speakPartial(cho) {
   speak(jamoToPhoneme(cho), 0.9);
 }
+
+// ── Tone feedback (Web Audio API, same pattern as 1_chosung_quiz) ──
+function tone(freq, start, dur, type = 'sine', peak = 0.18) {
+  if (!_ctx) return;
+  const t0 = _ctx.currentTime + start;
+  const osc  = _ctx.createOscillator();
+  const gain = _ctx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(0, t0);
+  gain.gain.linearRampToValueAtTime(peak, t0 + 0.01);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  osc.connect(gain).connect(_ctx.destination);
+  osc.start(t0);
+  osc.stop(t0 + dur + 0.05);
+}
+
+// 정답: C5 → E5 → G5 밝은 상승 아르페지오
+export function playCorrect() {
+  tone(523.25, 0.00, 0.14, 'triangle');
+  tone(659.25, 0.12, 0.14, 'triangle');
+  tone(783.99, 0.24, 0.22, 'triangle');
+}
+
+// 오답: G3 → D3 낮은 하강 톤
+export function playIncorrect() {
+  tone(196.00, 0.00, 0.16, 'sawtooth', 0.12);
+  tone(146.83, 0.14, 0.28, 'sawtooth', 0.12);
+}
