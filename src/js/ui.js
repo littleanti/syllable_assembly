@@ -17,8 +17,8 @@ export function updateProgress(current, total) {
   const bar = document.getElementById('progress-fill');
   if (bar) bar.style.width = `${(current / total) * 100}%`;
 
-  const stars = document.getElementById('stars-inline');
-  if (stars) stars.textContent = '⭐'.repeat(current);
+  const score = document.getElementById('score-inline');
+  if (score) score.textContent = current;
 }
 
 export function showTargetHint(syllable) {

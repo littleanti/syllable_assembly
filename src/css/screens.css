@@ -358,9 +358,16 @@
   color: var(--color-text-dim);
 }
 
-#stars-inline {
-  font-size: 1.1rem;
-  letter-spacing: 2px;
+.score-badge {
+  background: var(--yellow);
+  box-shadow: 0 3px 0 var(--yellow-dark);
+  padding: 5px 12px;
+  border-radius: 100px;
+  font-family: 'Jua', sans-serif;
+  font-size: 0.9rem;
+  color: var(--navy);
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .btn-quit {
