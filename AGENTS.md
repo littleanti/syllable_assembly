@@ -1,10 +1,11 @@
 <!-- Parent: ../AGENTS.md -->
-<!-- Generated: 2026-04-25 | Updated: 2026-04-25 -->
+<!-- Updated: 2026-04-26 -->
 
-# 2_syllable_assembly — 공감각적 음절 조립 게임
+# 2_syllable_assembly — 음절 조립소
 
 ## Purpose
-한글의 초성·중성·종성이 2차원 평면상에 결합되는 생성 원리를 시청촉각적으로 체화시키는 파닉스 게임. `1_chosung_quiz`에서 단어를 '인출'하던 학습자가, 이 단계에서는 흩어진 자모를 직접 '조립'하여 음절을 만들어내는 능동적 생산자로 전환된다.
+한글의 초성·중성·종성이 2차원 평면상에 결합되는 원리를 직접 조립하며 체화하는 파닉스 게임.
+`1_chosung_quiz`에서 단어를 '인출'하던 학습자가 흩어진 자모를 직접 조합하여 음절을 만드는 능동적 생산자로 전환된다.
 
 ## Target & Cognitive Goal
 
@@ -13,87 +14,119 @@
 | 대상 연령 | 만 4 ~ 6세 (유아 후기) |
 | 발달 단계 | 음운론적 해독 (Phonological Decoding) |
 | 핵심 인지 목표 | 자소-음소 대응, 공간 지각, 한글 조합 합법성 인지 |
-| 선행 게임 | `../1_chosung_quiz/` — 초성 단서 인지 완료 |
-| 후행 게임 | `../3_word_network/` — 음절을 단어로 확장 |
+| 선행 게임 | `../1_chosung_quiz/` |
+| 후행 게임 | `../3_word_network/` |
 
-## Game Mechanics
+## Levels
 
-### 핵심 루프
-1. 화면에 시각적 은유(예: 냄비, 우주선, 마법 가마솥)가 등장
-2. 자음(빨강), 모음(파랑), 받침(노랑) 블록이 화면 하단에 흩어져 표시
-3. 학습자가 블록을 드래그하여 가로/세로 위치에 배치
-4. 결합 즉시 오디오 출력 (`/ㄱ/` + `/ㅏ/` → `/가/`, + `/ㅂ/` → `/갑/`)
-5. 음절 완성 시 보상 애니메이션 (행성 점등, 생명체 변환 등)
+| 레벨 | 설명 | 음절 풀 |
+|------|------|---------|
+| 1 | 받침 없음 | `SYLLABLES_NO_JONG` |
+| 2 | 홑받침 | `SYLLABLES_WITH_JONG` |
+| 3 | 쌍자음 70% + 홑자음 30% | `SYLLABLES_DOUBLE_CHO` + `SYLLABLES_NO_JONG` |
+| 4 | 겹받침 70% + 홑받침 30% | `SYLLABLES_DOUBLE_JONG` + `SYLLABLES_WITH_JONG` |
 
-### 모음 형태 분기
-- **수직 모음**(ㅏ, ㅓ, ㅣ): 초성 좌측, 중성 우측, 종성 하단
-- **수평 모음**(ㅗ, ㅜ, ㅡ): 초성 상단, 중성 중간, 종성 하단
-- **복합 모음**(ㅘ, ㅝ, ㅢ): 두 모음 자소의 결합 처리 필요
+비율은 `lesson.js > initLesson()`에서 `Math.round(roundCount * 0.7)` 로 계산.
 
-### 리듬 액션 모드 (선택)
-4/4박자 배경음악에 맞춰 자모 블록이 떨어지며, 비트에 맞춰 결합하면 점수 가중치 부여. 신체 율동을 학습에 통합하여 인지 부하를 감소시킨다.
+## Architecture
 
-## Mobile-First Considerations
+### Entry Point
+`src/js/main.js` — 이벤트 바인딩, 설정 저장/로드, `startGame()` 호출
 
-본 게임은 **태블릿(7인치+)을 1순위, 스마트폰을 2순위**로 설계. 만 4 ~ 6세는 손이 작으나 정밀도가 낮으므로 큰 타겟이 필수.
+### Game Flow
+```
+main.js → startGame(level, tapMode, corrMode, roundCount)
+  └─ lesson.js: initLesson()  — 음절 큐 생성, state 초기화
+  └─ game.js: startRound()   — 타겟 설정, 팔레트 렌더링
+       └─ onJamoPlaced()     — 자모 배치 시 평가
+            ├─ handleSuccess() → advanceLesson() → 다음 라운드 or 종료
+            └─ handleFailure() → skipLesson()   → 다음 라운드 or 종료
+```
 
-| 항목 | 권장 사양 |
-|------|----------|
-| 최소 터치 타겟 | **64×64dp** (Apple HIG/Material 표준 48dp보다 크게) |
-| 권장 디바이스 | iPad Mini 이상, 갤럭시 탭 A8 이상 |
-| 화면 모드 | **가로(Landscape) 잠금** — 2D 자모 배치 영역 확보 |
-| 폴백 모드 | 세로일 경우 회전 안내 일러스트 표시 |
+### Key Modules
 
-### 터치 인터랙션 원칙
-- **드래그 + 스냅 자성**: 자모 블록이 정답 위치 근처(±20dp)에 오면 자동 흡착 — 정밀도 보완
-- **탭-탭 모드 (대안)**: 자모 → 위치 순서로 탭만 해도 배치 가능 (드래그 못 하는 어린이용)
-- **iOS/Android 공통**: Pointer Events API + `touch-action: none` 으로 스크롤 충돌 방지
-- **사운드 게이트**: iOS Safari의 자동재생 정책 우회 — 첫 화면에서 "시작" 버튼 탭 후 AudioContext 활성화
+| 파일 | 역할 |
+|------|------|
+| `hangul.js` | 조합(`compose`) / 분해(`decompose`) — `0xAC00 + 초성×588 + 중성×28 + 종성` |
+| `layout.js` | 모음 형태(수직/수평)에 따라 dock grid-template 전환 |
+| `pointer.js` | Pointer Events API 기반 드래그 앤 드롭 + 슬롯 스냅 |
+| `tap.js` | 탭-탭 모드 — 자모 선택 → 슬롯 자동 배치 |
+| `lesson.js` | 레벨별 음절 풀 혼합, `buildPalette()` 로 오답 블록 생성 |
+| `audio.js` | Web Speech API TTS (자모 단독 발음 + 조합 음절 발음) |
+| `state.js` | 전역 상태 (`board`, `target`, `lessonQueue`, `roundCount` 등) |
+| `storage.js` | localStorage: level, tapMode, correctionMode, roundCount |
 
-### 성능 고려
-- 보급형 안드로이드(2GB RAM)에서도 60fps 유지 — CSS 변환 위주, 무거운 Canvas 회피
-- 자모 발음 오디오는 사전 디코딩 후 캐시 (사용자 입력 대기 동안 미리 로드)
+### State Shape (`state.js`)
+```js
+{
+  audioReady, currentScreen,
+  board: { cho, jung, jong },   // 현재 배치된 자모
+  target: { syllable, cho, jung, jong, hasJong, ... },
+  lessonQueue: string[],         // 라운드별 음절 목록
+  lessonIdx, stars,
+  level, roundCount              // 동적 문제 수
+}
+```
 
-## For AI Agents
+## Settings
 
-### Working In This Directory
-- 아직 구현되지 않은 **설계 단계** 게임 — 본 AGENTS.md는 PRD/TRD 역할
-- 기존 두 프로젝트와 동일한 스택 권장: Vanilla JS + CSS, 빌드 없음, 정적 서버
-- 포트 충돌 회피: `1_chosung_quiz`(3001), `7_four-character_idiom_crossword`(3007)와 겹치지 않게 **3002** 권장
-- **PWA 매니페스트** 포함 권장 — 홈 화면 추가 시 풀스크린 실행
+설정 화면(`#screen-settings`)은 `1_chosung_quiz` 스타일:
+- max-width 500px 센터 정렬, navy 테두리 3D 박스 섹션
+- div 기반 토글 스위치 (`.toggle` / `.toggle.on`)
+- chip-row 문제 수 선택 (5 / 10 / 15 / 20)
 
-### Implementation Priorities
-1. **한글 조합 알고리즘** 우선 — `(초성, 중성, 종성?)` → 유니코드 음절 변환 핵심 공식: `0xAC00 + (초성 × 588) + (중성 × 28) + 종성`
-2. **드래그 앤 드롭** — Pointer Events API 사용 (터치+마우스+펜 통합)
-3. **Web Audio API** — 자모음 발음 사전 녹음 후 결합 시 즉시 재생, 또는 합성 톤
-4. **모음 형태별 동적 레이아웃** — CSS Grid / Flex로 위치 자동 분기
-5. **반응형 뷰포트** — `100dvh`(dynamic viewport) 사용, iOS Safari 주소창 변동 대응
+| 설정 | 기본값 | 저장 키 |
+|------|--------|---------|
+| 문제 수 | 10 | `roundCount` |
+| 탭-탭 모드 | OFF | `tapMode` |
+| 오답 수정 모드 | OFF | `correctionMode` |
 
-### Key Behaviors to Preserve (Future Implementation)
-- 잘못된 조합(예: 초성에 모음 배치)은 거부하되 부정적 피드백 최소화 — 블록이 튕겨 나가는 정도
-- 정답에 가까운 부분 정답에도 격려 피드백 (예: 자음·모음만 맞춘 경우 "거의 다 됐어요!")
-- 학습 종료 시점은 항상 긍정적 정서로 마무리 — 적응형 난이도 조절
-- 더블탭으로 인한 줌 동작 비활성화: `<meta name="viewport" content="user-scalable=no">` (단, 접근성 트레이드오프 인지)
+## UI Layout (Play Screen)
 
-### Testing Requirements
-- 만 4 ~ 6세 사용자 테스트 권장 (UI/UX 검증)
-- **실기기 테스트 필수**: 갤럭시 탭, iPad, 보급형 안드로이드 폰
-- 모바일 터치 정확도 테스트 (작은 손가락 대응) — 64dp 타겟 검증
-- 가로/세로 회전 시 레이아웃 깨짐 검증
+```
+┌─ play-header ─────────────────────┐
+│  [✕]  0/10 ████░░░░  🏆 0         │
+└───────────────────────────────────┘
+┌─ play-main ───────────────────────┐
+│        [ 목표  가  🔊 ]            │  ← #target-card
+│                가                 │  ← #assembled-display (opacity 0→1)
+│        ┌──────┬──────┐            │
+│        │ 초성 │ 중성 │            │  ← #dock slots
+│        └──────┴──────┘            │
+│        └─── 받침 ───┘ (조건부)    │
+└───────────────────────────────────┘
+┌─ palette ─────────────────────────┐
+│  [ㄱ] [ㄴ] [ㅏ] [ㅗ] ...          │  ← 자모 블록
+└───────────────────────────────────┘
+```
 
-## Dependencies (Planned)
+`#assembled-display`는 dock 내부 overlay가 아닌 target-card와 dock **사이** 독립 요소.
+자모가 배치될 때마다 조합된 음절을 `.pop-in` 애니메이션으로 표시.
 
-### External
-- Web Audio API — 자모 발음 합성/재생
-- Pointer Events API — 크로스 디바이스 드래그
-- (선택) Web Speech API — 학습자 발화 인식 시 align4d 류 발음 평가
+## Dev Server
 
-### Data
-- 자모 발음 오디오 파일 또는 합성 규칙
-- 학습 단어 목록 (제3단계와 공유 가능)
+```bash
+npm run dev   # npx serve . -l 3002
+npm run live  # npx live-server --port=3002
+```
 
-## Theoretical Reference
-- 보고서 §"제1단계: 공감각적 음절 조립 게임" 참조
-- 한글의 형성 원리(상형, 가획): 우뇌 시각 처리와 좌뇌 논리 처리의 양뇌 통합
+포트: **3002** (`1_chosung_quiz`=3000 과 충돌 방지)
 
-<!-- MANUAL: -->
+## Key Behaviors to Preserve
+
+- 잘못된 배치(오답 블록) → 기본 모드: 전체 완성 시 `wrong-shake` 후 다음으로 스킵
+- 오답 수정 모드: 배치 즉시 `reject-flash` 후 해당 슬롯 초기화
+- 받침 슬롯은 `hasJong` 일 때만 표시 (`hidden` 토글)
+- 모음 형태에 따라 dock이 `shape-vertical` / `shape-horizontal` CSS class 전환
+- 세로 모드(폰, 600px 미만)에서 게임 화면 진입 시 회전 안내 화면으로 전환
+
+## Testing Checklist
+
+- [ ] 레벨 3: 쌍자음(까, 따 등) 7개 + 홑자음 3개 섞임 확인
+- [ ] 레벨 4: 겹받침(닭, 흙 등) 7개 + 홑받침 3개 섞임 확인
+- [ ] 문제 수 5/10/15/20 변경 후 게임 진행 수 일치 확인
+- [ ] 탭-탭 모드 — 드래그 없이 자모 선택 가능
+- [ ] 오답 수정 모드 — 틀린 자모 배치 시 즉시 반려
+- [ ] 수평 모음(ㅗ, ㅜ, ㅡ) dock 레이아웃 수직 배치 확인
+- [ ] 세로 화면 진입 시 회전 안내 표시
+- [ ] 설정 저장 — 새로고침 후 이전 설정 복원
