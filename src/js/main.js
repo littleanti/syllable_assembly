@@ -1,7 +1,8 @@
 import { init as audioInit, unlock as audioUnlock } from './audio.js';
-import { showScreen, checkOrientation, showTotalStars } from './ui.js';
+import { showScreen, checkOrientation } from './ui.js';
 import { startGame, stopGame, replayTargetAudio, getCurrentSettings } from './game.js';
 import { loadProgress, saveProgress } from './storage.js';
+import { ROUND_COUNT } from './config.js';
 
 audioInit();
 
@@ -16,8 +17,9 @@ const _saved = loadProgress();
 let selectedLevel      = _saved.level      || 1;
 let selectedTapMode    = _saved.tapMode    || false;
 let selectedCorrection = _saved.correctionMode || false;
+let selectedRoundCount = _saved.roundCount || ROUND_COUNT;
 
-showTotalStars(_saved.totalStars || 0);
+const COUNT_OPTIONS = [5, 10, 15, 20];
 
 window.addEventListener('resize', () => checkOrientation());
 
@@ -27,6 +29,7 @@ function saveSettings() {
   s.level          = selectedLevel;
   s.tapMode        = selectedTapMode;
   s.correctionMode = selectedCorrection;
+  s.roundCount     = selectedRoundCount;
   saveProgress(s);
 }
 
@@ -34,19 +37,40 @@ function isPortraitBlocked() {
   return window.innerHeight > window.innerWidth && window.innerWidth < 600;
 }
 
-function launchGame(level, tapMode, corrMode) {
+function launchGame(level, tapMode, corrMode, roundCount) {
   if (isPortraitBlocked()) {
     showScreen('orientation');
     const resume = () => {
       if (!isPortraitBlocked()) {
         window.removeEventListener('resize', resume);
-        startGame(level, tapMode, corrMode);
+        startGame(level, tapMode, corrMode, roundCount);
       }
     };
     window.addEventListener('resize', resume);
   } else {
-    startGame(level, tapMode, corrMode);
+    startGame(level, tapMode, corrMode, roundCount);
   }
+}
+
+function syncToggle(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('on', value);
+}
+
+function renderCountChips() {
+  const row = document.getElementById('count-chips');
+  if (!row) return;
+  row.innerHTML = '';
+  COUNT_OPTIONS.forEach(n => {
+    const btn = document.createElement('button');
+    btn.className = 'chip' + (n === selectedRoundCount ? ' active' : '');
+    btn.textContent = `${n}문제`;
+    btn.addEventListener('click', () => {
+      selectedRoundCount = n;
+      renderCountChips();
+    });
+    row.appendChild(btn);
+  });
 }
 
 // ── Level buttons (home screen) ──────────────────────────
@@ -55,25 +79,35 @@ document.querySelectorAll('.level-btn').forEach(btn => {
     selectedLevel = Number(btn.dataset.level);
     saveSettings();
     await audioUnlock();
-    launchGame(selectedLevel, selectedTapMode, selectedCorrection);
+    launchGame(selectedLevel, selectedTapMode, selectedCorrection, selectedRoundCount);
   });
 });
 
 // ── Settings screen ──────────────────────────────────────
 document.getElementById('btn-open-settings').addEventListener('click', () => {
-  const tapToggle = document.getElementById('toggle-tap');
-  if (tapToggle) tapToggle.checked = selectedTapMode;
-  const corrToggle = document.getElementById('toggle-correction');
-  if (corrToggle) corrToggle.checked = selectedCorrection;
+  syncToggle('toggle-tap', selectedTapMode);
+  syncToggle('toggle-correction', selectedCorrection);
+  renderCountChips();
   showScreen('settings');
 });
 
-document.getElementById('toggle-tap').addEventListener('change', e => {
-  selectedTapMode = e.target.checked;
+document.getElementById('toggle-tap').addEventListener('click', function () {
+  selectedTapMode = !selectedTapMode;
+  this.classList.toggle('on', selectedTapMode);
 });
 
-document.getElementById('toggle-correction').addEventListener('change', e => {
-  selectedCorrection = e.target.checked;
+document.getElementById('toggle-correction').addEventListener('click', function () {
+  selectedCorrection = !selectedCorrection;
+  this.classList.toggle('on', selectedCorrection);
+});
+
+document.getElementById('btn-settings-reset').addEventListener('click', () => {
+  selectedTapMode    = false;
+  selectedCorrection = false;
+  selectedRoundCount = ROUND_COUNT;
+  syncToggle('toggle-tap', false);
+  syncToggle('toggle-correction', false);
+  renderCountChips();
 });
 
 document.getElementById('btn-close-settings').addEventListener('click', () => {
@@ -89,19 +123,16 @@ document.getElementById('btn-settings-done').addEventListener('click', () => {
 // ── Play screen buttons ──────────────────────────────────
 document.getElementById('btn-retry').addEventListener('click', () => {
   const s = getCurrentSettings();
-  startGame(s.level, s.tapMode, s.correctionMode);
-  showTotalStars(loadProgress().totalStars || 0);
+  startGame(s.level, s.tapMode, s.correctionMode, s.roundCount);
 });
 
 document.getElementById('btn-quit').addEventListener('click', () => {
   stopGame();
-  showTotalStars(loadProgress().totalStars || 0);
 });
 
 // ── End screen buttons ───────────────────────────────────
 document.getElementById('btn-home').addEventListener('click', () => {
   showScreen('start');
-  showTotalStars(loadProgress().totalStars || 0);
 });
 
 // ── Audio controls ───────────────────────────────────────

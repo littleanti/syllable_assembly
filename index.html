@@ -26,7 +26,6 @@
   <img src="./favicon.svg" class="start-icon" alt="">
   <div class="game-title">음절 조립소</div>
   <div class="game-subtitle">자모를 모아 글자를 만들어요!</div>
-  <div id="total-stars-display" class="total-stars-display"></div>
 
   <p class="level-label">레벨을 선택하세요</p>
   <div class="level-buttons">
@@ -55,25 +54,32 @@
 
   <div class="settings-body">
     <div class="settings-section">
-      <label class="settings-toggle-row">
+      <div class="section-label">🎲 문제 수</div>
+      <div class="chip-row" id="count-chips"></div>
+    </div>
+
+    <div class="settings-section">
+      <div class="section-label">🎮 게임 옵션</div>
+      <div class="settings-toggle-row">
         <div>
           <div class="settings-toggle-label">탭-탭 모드</div>
           <div class="settings-toggle-hint">드래그 대신 탭으로 자모 선택</div>
         </div>
-        <input type="checkbox" id="toggle-tap" class="settings-checkbox">
-      </label>
-      <label class="settings-toggle-row">
+        <div class="toggle" id="toggle-tap"></div>
+      </div>
+      <div class="settings-toggle-row">
         <div>
           <div class="settings-toggle-label">오답 수정 모드</div>
           <div class="settings-toggle-hint">틀려도 다시 풀 수 있어요</div>
         </div>
-        <input type="checkbox" id="toggle-correction" class="settings-checkbox">
-      </label>
+        <div class="toggle" id="toggle-correction"></div>
+      </div>
     </div>
   </div>
 
   <div class="settings-footer">
-    <button id="btn-settings-done" class="btn-primary">완료 ✓</button>
+    <button id="btn-settings-reset" class="btn-ghost">기본값</button>
+    <button id="btn-settings-done" class="btn-primary">🏠 홈으로</button>
   </div>
 </div>
 
@@ -104,12 +110,14 @@
       <span id="btn-speak">🔊</span>
     </button>
 
+    <!-- Assembled syllable preview (between target and dock) -->
+    <div id="assembled-display" class="assembled-display"></div>
+
     <!-- Assembly dock -->
     <div id="dock" class="shape-vertical">
       <div class="slot" data-slot="cho"  data-label="초성" aria-label="초성 자리"></div>
       <div class="slot" data-slot="jung" data-label="중성" aria-label="중성 자리"></div>
       <div class="slot" data-slot="jong" data-label="받침" aria-label="받침 자리" hidden></div>
-      <div id="assembled-display" class="assembled-display"></div>
     </div>
 
     <!-- Partial correct feedback -->
@@ -120,11 +128,6 @@
   <!-- Jamo palette -->
   <footer id="palette" aria-label="자모 블록"></footer>
 
-</div>
-
-<!-- ── Reward overlay ───────────────────────────────── -->
-<div id="reward-overlay" hidden aria-hidden="true">
-  <div class="reward-emoji">⭐</div>
 </div>
 
 <!-- ── End screen ───────────────────────────────────── -->

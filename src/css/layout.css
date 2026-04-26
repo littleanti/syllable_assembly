@@ -30,10 +30,8 @@
     "jung"
     "jong";
   grid-template-columns: 1fr;
-  /* +44px = 20px padding × 2 + 2px border × 2, so content = slot-size exactly */
   width: calc(var(--slot-size) + 44px);
   justify-items: center;
-  row-gap: 24px;
 }
 
 /* Hide jong row when not used */
@@ -49,6 +47,7 @@
 .slot {
   width:  var(--slot-size);
   height: var(--slot-size);
+  margin-bottom: var(--slot-bottom-margin);
   border: var(--slot-border);
   border-radius: var(--slot-radius);
   display: flex;
@@ -75,22 +74,19 @@
   background: rgba(255,215,0,0.12);
 }
 
-/* Assembled syllable overlay */
+/* Assembled syllable preview — standalone element between target-card and dock */
 .assembled-display {
-  position: absolute;
-  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 5rem;
+  height: 72px;
+  font-size: 4.5rem;
   font-weight: 900;
   color: var(--navy);
   pointer-events: none;
   opacity: 0;
-}
-
-.assembled-display {
   will-change: transform, opacity;
+  flex-shrink: 0;
 }
 
 .assembled-display.pop-in {
@@ -113,6 +109,11 @@
 .drag-placeholder {
   visibility: hidden;
   pointer-events: none;
+}
+
+/* ── Small landscape phones ────────────────────────────── */
+@media (max-height: 480px) {
+  .assembled-display { height: 44px; font-size: 3rem; }
 }
 
 /* ── Portrait tablet palette adjustments ──────────────── */

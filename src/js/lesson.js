@@ -8,16 +8,31 @@ import {
 import { shuffle, pickExcluding } from './utils.js';
 import state from './state.js';
 
-export function initLesson(level = 1) {
+export function initLesson(level = 1, roundCount = ROUND_COUNT) {
   state.level = level;
-  let pool;
-  switch (level) {
-    case 2: pool = SYLLABLES_WITH_JONG;   break;
-    case 3: pool = SYLLABLES_DOUBLE_CHO;  break;
-    case 4: pool = SYLLABLES_DOUBLE_JONG; break;
-    default: pool = SYLLABLES_NO_JONG;
+  state.roundCount = roundCount;
+
+  if (level === 3) {
+    // 쌍자음 70% + 홑자음 30%
+    const dCnt = Math.round(roundCount * 0.7);
+    const sCnt = roundCount - dCnt;
+    state.lessonQueue = shuffle([
+      ...shuffle([...SYLLABLES_DOUBLE_CHO]).slice(0, dCnt),
+      ...shuffle([...SYLLABLES_NO_JONG]).slice(0, sCnt),
+    ]);
+  } else if (level === 4) {
+    // 겹받침 70% + 홑받침 30%
+    const dCnt = Math.round(roundCount * 0.7);
+    const sCnt = roundCount - dCnt;
+    state.lessonQueue = shuffle([
+      ...shuffle([...SYLLABLES_DOUBLE_JONG]).slice(0, dCnt),
+      ...shuffle([...SYLLABLES_WITH_JONG]).slice(0, sCnt),
+    ]);
+  } else {
+    const pool = level === 2 ? SYLLABLES_WITH_JONG : SYLLABLES_NO_JONG;
+    state.lessonQueue = shuffle([...pool]).slice(0, roundCount);
   }
-  state.lessonQueue = shuffle(pool).slice(0, ROUND_COUNT);
+
   state.lessonIdx = 0;
   state.stars = 0;
 }

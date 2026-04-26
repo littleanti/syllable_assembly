@@ -1,0 +1,20 @@
+{
+  "name": "syllable-assembly",
+  "version": "1.0.0",
+  "description": "자모를 모아 음절을 조립하는 한글 학습 게임",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx -y serve . -l 3002",
+    "start": "npx -y serve . -l 3002",
+    "live": "npx -y live-server --port=3002 --no-browser"
+  },
+  "keywords": [
+    "korean",
+    "hangul",
+    "syllable",
+    "game",
+    "education"
+  ],
+  "license": "MIT"
+}

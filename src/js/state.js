@@ -7,6 +7,7 @@ const state = {
   lessonIdx: 0,
   stars: 0,
   level: 1,
+  roundCount: 10,
 };
 
 export default state;

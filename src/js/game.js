@@ -24,14 +24,14 @@ let currentLevel      = 1;
 let currentTapMode    = false;
 let correctionMode    = false;
 
-export function startGame(level = 1, tapMode = false, corrMode = false) {
+export function startGame(level = 1, tapMode = false, corrMode = false, roundCount = ROUND_COUNT) {
   currentLevel      = level;
   currentTapMode    = tapMode;
   correctionMode    = corrMode;
 
-  initLesson(level);
+  initLesson(level, roundCount);
   showScreen('play');
-  updateProgress(0, ROUND_COUNT);
+  updateProgress(0, 0, state.roundCount);
 
   const paletteEl = document.getElementById('palette');
   const dockEl    = document.getElementById('dock');
@@ -59,7 +59,7 @@ export function stopGame() {
 }
 
 export function getCurrentSettings() {
-  return { level: currentLevel, tapMode: currentTapMode, correctionMode };
+  return { level: currentLevel, tapMode: currentTapMode, correctionMode, roundCount: state.roundCount };
 }
 
 function startRound() {
@@ -170,16 +170,12 @@ async function handleSuccess() {
   speak(state.target.syllable, 0.75);
   showReward();
   advanceLesson();
-  updateProgress(state.stars, ROUND_COUNT);
-
-  const saved = loadProgress();
-  saved.totalStars = (saved.totalStars || 0) + 1;
-  saveProgress(saved);
+  updateProgress(state.lessonIdx, state.stars, state.roundCount);
 
   await sleep(REWARD_DELAY_MS);
 
   if (isLessonComplete()) {
-    showEndScreen(state.stars, ROUND_COUNT);
+    showEndScreen(state.lessonIdx, state.stars);
   } else {
     startRound();
   }
@@ -195,10 +191,10 @@ async function handleFailure() {
   await sleep(700);
 
   skipLesson();
-  updateProgress(state.stars, ROUND_COUNT);
+  updateProgress(state.lessonIdx, state.stars, state.roundCount);
 
   if (isLessonComplete()) {
-    showEndScreen(state.stars, ROUND_COUNT);
+    showEndScreen(state.lessonIdx, state.stars);
   } else {
     startRound();
   }
