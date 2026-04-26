@@ -30,10 +30,11 @@
   --color-jong-bg:   #fff8e0;
 
   /* ── Slot ── */
-  --slot-size:       96px;
-  --slot-radius:     16px;
-  --slot-border:     2px dashed var(--color-border);
-  --slot-filled-bg:  #f5f0e8;
+  --slot-size:           96px;
+  --slot-radius:         16px;
+  --slot-border:         2px dashed var(--color-border);
+  --slot-filled-bg:      #f5f0e8;
+  --slot-bottom-margin:  20px;
 
   /* ── Block ── */
   --block-size:      72px;

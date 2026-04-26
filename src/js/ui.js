@@ -10,7 +10,7 @@ export function showScreen(name) {
   state.currentScreen = name;
 }
 
-export function updateProgress(current, total) {
+export function updateProgress(current, stars, total) {
   const el = document.getElementById('progress-text');
   if (el) el.textContent = `${current} / ${total}`;
 
@@ -18,7 +18,7 @@ export function updateProgress(current, total) {
   if (bar) bar.style.width = `${(current / total) * 100}%`;
 
   const score = document.getElementById('score-inline');
-  if (score) score.textContent = current;
+  if (score) score.textContent = stars;
 }
 
 export function showTargetHint(syllable) {
@@ -98,12 +98,6 @@ export function showPartialFeedback(msg) {
 export function hidePartialFeedback() {
   const el = document.getElementById('partial-feedback');
   if (el) { el.hidden = true; clearTimeout(el._t); }
-}
-
-export function showTotalStars(n) {
-  const el = document.getElementById('total-stars-display');
-  if (!el) return;
-  el.textContent = n > 0 ? `누적 별 ${n}개 ⭐` : '';
 }
 
 function isPortraitBlocked() {

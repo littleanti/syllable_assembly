@@ -49,7 +49,7 @@ export const JONG_META = [
   { char: 'ㅂ', name: '비읍',     color: 'jong' },
   { char: 'ㅅ', name: '시옷',     color: 'jong' },
   { char: 'ㅇ', name: '이응',     color: 'jong' },
-  // 겹받침 (complex jong — Level 4)
+  // complex jong — Level 4
   { char: 'ㄺ', name: '리을기역', color: 'jong' },
   { char: 'ㄻ', name: '리을미음', color: 'jong' },
   { char: 'ㄼ', name: '리을비읍', color: 'jong' },

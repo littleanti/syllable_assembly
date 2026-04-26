@@ -30,14 +30,14 @@
   color: var(--color-jung);
   border-color: var(--color-jung);
   /* circle hint: vowel */
-  border-radius: 50%;
+  border-radius: var(--block-radius);
 }
 
 .jamo-block.color-jong {
   background: var(--color-jong-bg);
   color: var(--color-jong);
   border-color: var(--color-jong);
-  border-radius: 10px;
+  border-radius: var(--block-radius);
 }
 
 /* Hover / press feedback */
