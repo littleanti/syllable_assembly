@@ -54,6 +54,21 @@ export function speakPartial(cho) {
   speak(jamoToPhoneme(cho), 0.9);
 }
 
+// Speak a single text and return a Promise that resolves when speech ends
+export function speakAndWait(text, rate = 0.82) {
+  return new Promise(resolve => {
+    if (!window.speechSynthesis) { resolve(); return; }
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'ko-KR';
+    u.rate = rate;
+    if (koVoice) u.voice = koVoice;
+    u.onend = resolve;
+    u.onerror = resolve;
+    speechSynthesis.speak(u);
+  });
+}
+
 // Speak multiple texts in sequence (queued, no cancel between them)
 export function speakSequence(texts, rate = 0.82) {
   if (!window.speechSynthesis) return;

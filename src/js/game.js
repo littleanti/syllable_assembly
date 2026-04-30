@@ -6,7 +6,7 @@ import {
   showReward, showEndScreen, updateProgress,
   showPartialFeedback, hidePartialFeedback,
 } from './ui.js';
-import { speak, speakPartial, speakSequence, playCorrect, playIncorrect } from './audio.js';
+import { speak, speakPartial, speakSequence, speakAndWait, playCorrect, playIncorrect } from './audio.js';
 import { DragManager } from './pointer.js';
 import { TapManager } from './tap.js';
 import { initLesson, currentTarget, advanceLesson, skipLesson, isLessonComplete, buildPalette } from './lesson.js';
@@ -91,7 +91,7 @@ function startRound() {
   drag.updateSlots(slots);
 
   showTargetHint(target.syllable);
-  setTimeout(() => speak(target.syllable, 0.75), 600);
+  setTimeout(() => speak(target.syllable, 0.75), 200);
 }
 
 function renderPalette(blocks) {
@@ -170,13 +170,14 @@ async function onJamoPlaced(char, category, slotName) {
 async function handleSuccess(lastChar) {
   busy = true;
   playCorrect();
-  // Say the last placed jamo's phoneme, then the assembled syllable
-  speakSequence([jamoToPhoneme(lastChar), state.target.syllable], 0.82);
   showReward();
   advanceLesson();
   updateProgress(state.lessonIdx, state.stars, state.roundCount);
 
-  await sleep(REWARD_DELAY_MS);
+  // Speak last phoneme → assembled → 300ms gap → then transition
+  await speakAndWait(jamoToPhoneme(lastChar), 0.9);
+  await speakAndWait(state.target.syllable, 0.82);
+  await sleep(200);
 
   if (isLessonComplete()) {
     showEndScreen(state.lessonIdx, state.stars);
