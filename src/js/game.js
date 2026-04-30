@@ -125,6 +125,7 @@ async function onJamoPlaced(char, category, slotName) {
         slotEl.classList.add('reject-flash');
         setTimeout(() => slotEl.classList.remove('reject-flash'), 380);
       }
+      playIncorrect();
       state.board[slotName] = null;
       updateSlotDisplay(slotName, null);
       return;
