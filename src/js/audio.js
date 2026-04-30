@@ -54,6 +54,19 @@ export function speakPartial(cho) {
   speak(jamoToPhoneme(cho), 0.9);
 }
 
+// Speak multiple texts in sequence (queued, no cancel between them)
+export function speakSequence(texts, rate = 0.82) {
+  if (!window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  texts.forEach(text => {
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'ko-KR';
+    u.rate = rate;
+    if (koVoice) u.voice = koVoice;
+    speechSynthesis.speak(u);
+  });
+}
+
 // ── Tone feedback (Web Audio API, same pattern as 1_chosung_quiz) ──
 function tone(freq, start, dur, type = 'sine', peak = 0.18) {
   if (!_ctx) return;

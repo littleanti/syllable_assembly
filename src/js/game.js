@@ -1,4 +1,4 @@
-import { compose, CHO, JUNG, JONG } from './hangul.js';
+import { compose, CHO, JUNG, JONG, jamoToPhoneme } from './hangul.js';
 import { applyVowelShape, setJongVisible } from './layout.js';
 import {
   showScreen, showTargetHint, updateSlotDisplay,
@@ -6,7 +6,7 @@ import {
   showReward, showEndScreen, updateProgress,
   showPartialFeedback, hidePartialFeedback,
 } from './ui.js';
-import { speak, speakPartial, playCorrect, playIncorrect } from './audio.js';
+import { speak, speakPartial, speakSequence, playCorrect, playIncorrect } from './audio.js';
 import { DragManager } from './pointer.js';
 import { TapManager } from './tap.js';
 import { initLesson, currentTarget, advanceLesson, skipLesson, isLessonComplete, buildPalette } from './lesson.js';
@@ -91,7 +91,7 @@ function startRound() {
   drag.updateSlots(slots);
 
   showTargetHint(target.syllable);
-  setTimeout(() => speak(target.syllable, 0.75), 300);
+  setTimeout(() => speak(target.syllable, 0.75), 600);
 }
 
 function renderPalette(blocks) {
@@ -132,27 +132,29 @@ async function onJamoPlaced(char, category, slotName) {
     }
   }
 
-  if (b.cho && !b.jung) {
-    speakPartial(b.cho);
-  } else if (b.cho && b.jung) {
-    const cIdx = CHO.indexOf(b.cho);
-    const vIdx = JUNG.indexOf(b.jung);
-    const jIdx = (hasJong && b.jong) ? Math.max(0, JONG.indexOf(b.jong)) : 0;
-    const assembled = compose(cIdx, vIdx, jIdx);
-    showAssembledSyllable(assembled);
-    speak(assembled, 0.85);
-  }
-
   const choOk  = b.cho  === cho;
   const jungOk = b.jung === jung;
   const jongOk = !hasJong || b.jong === jong;
+  const isComplete = choOk && jungOk && jongOk && b.cho && b.jung;
+
+  // Speak placed jamo's phoneme only when not completing (handleSuccess handles the final sequence)
+  if (!isComplete) {
+    speak(jamoToPhoneme(char), 0.9);
+  }
+
+  if (b.cho && b.jung) {
+    const cIdx = CHO.indexOf(b.cho);
+    const vIdx = JUNG.indexOf(b.jung);
+    const jIdx = (hasJong && b.jong) ? Math.max(0, JONG.indexOf(b.jong)) : 0;
+    showAssembledSyllable(compose(cIdx, vIdx, jIdx));
+  }
 
   if (hasJong && choOk && jungOk && !b.jong) {
     showPartialFeedback('거의 다 됐어요! 받침을 놓아요 👇');
   }
 
-  if (choOk && jungOk && jongOk && b.cho && b.jung) {
-    await handleSuccess();
+  if (isComplete) {
+    await handleSuccess(char);
     return;
   }
 
@@ -165,10 +167,11 @@ async function onJamoPlaced(char, category, slotName) {
   }
 }
 
-async function handleSuccess() {
+async function handleSuccess(lastChar) {
   busy = true;
   playCorrect();
-  speak(state.target.syllable, 0.75);
+  // Say the last placed jamo's phoneme, then the assembled syllable
+  speakSequence([jamoToPhoneme(lastChar), state.target.syllable], 0.82);
   showReward();
   advanceLesson();
   updateProgress(state.lessonIdx, state.stars, state.roundCount);
