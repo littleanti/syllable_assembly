@@ -101,8 +101,7 @@ export function hidePartialFeedback() {
 }
 
 function isPortraitBlocked() {
-  // Allow portrait on tablets (width >= 600px) — only block on small phones
-  return window.innerHeight > window.innerWidth && window.innerWidth < 600;
+  return false;
 }
 
 export function checkOrientation() {

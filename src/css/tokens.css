@@ -61,6 +61,17 @@
   }
 }
 
+/* ── Portrait phone layout (< 600px wide) ─────────── */
+@media (orientation: portrait) and (max-width: 599px) {
+  :root {
+    --slot-size:  76px;
+    --block-size: 58px;
+    --block-font: 1.9rem;
+    --header-h:   48px;
+    --footer-h:   130px;
+  }
+}
+
 /* ── Portrait tablet layout (≥600px wide) ─────────── */
 @media (orientation: portrait) and (min-width: 600px) {
   :root {

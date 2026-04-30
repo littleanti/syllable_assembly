@@ -33,23 +33,8 @@ function saveSettings() {
   saveProgress(s);
 }
 
-function isPortraitBlocked() {
-  return window.innerHeight > window.innerWidth && window.innerWidth < 600;
-}
-
 function launchGame(level, tapMode, corrMode, roundCount) {
-  if (isPortraitBlocked()) {
-    showScreen('orientation');
-    const resume = () => {
-      if (!isPortraitBlocked()) {
-        window.removeEventListener('resize', resume);
-        startGame(level, tapMode, corrMode, roundCount);
-      }
-    };
-    window.addEventListener('resize', resume);
-  } else {
-    startGame(level, tapMode, corrMode, roundCount);
-  }
+  startGame(level, tapMode, corrMode, roundCount);
 }
 
 function syncToggle(id, value) {
