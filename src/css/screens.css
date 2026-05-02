@@ -22,11 +22,14 @@
 }
 
 .game-title {
-  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-family: 'Jua', sans-serif;
+  font-size: 3rem;
   text-align: center;
   line-height: 1.2;
-  color: var(--navy);
-  animation: float 3s ease-in-out infinite;
+  color: var(--coral);
+  transform: rotate(-2deg);
+  text-shadow: 4px 4px 0 var(--yellow);
+  letter-spacing: 2px;
 }
 
 .game-subtitle {
