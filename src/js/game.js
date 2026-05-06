@@ -20,14 +20,12 @@ const tap  = new TapManager();
 
 let busy = false;
 let dragInitialized = false;
-let currentLevel      = 1;
-let currentTapMode    = false;
-let correctionMode    = false;
+let currentLevel   = 1;
+let correctionMode = false;
 
-export function startGame(level = 1, tapMode = false, corrMode = false, roundCount = ROUND_COUNT) {
-  currentLevel      = level;
-  currentTapMode    = tapMode;
-  correctionMode    = corrMode;
+export function startGame(level = 1, corrMode = false, roundCount = ROUND_COUNT) {
+  currentLevel   = level;
+  correctionMode = corrMode;
 
   initLesson(level, roundCount);
   showScreen('play');
@@ -41,15 +39,10 @@ export function startGame(level = 1, tapMode = false, corrMode = false, roundCou
     drag.onPlaced = onJamoPlaced;
     dragInitialized = true;
   }
+  drag.enabled = true;
 
-  if (tapMode) {
-    drag.enabled = false;
-    tap.enable(paletteEl, dockEl);
-    tap.onPlaced = onJamoPlaced;
-  } else {
-    drag.enabled = true;
-    tap.disable();
-  }
+  tap.enable(paletteEl, dockEl);
+  tap.onPlaced = onJamoPlaced;
 
   startRound();
 }
@@ -59,7 +52,7 @@ export function stopGame() {
 }
 
 export function getCurrentSettings() {
-  return { level: currentLevel, tapMode: currentTapMode, correctionMode, roundCount: state.roundCount };
+  return { level: currentLevel, correctionMode, roundCount: state.roundCount };
 }
 
 function startRound() {

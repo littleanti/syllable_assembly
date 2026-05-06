@@ -15,7 +15,6 @@ if ('serviceWorker' in navigator) {
 // ── Saved preferences ────────────────────────────────────
 const _saved = loadProgress();
 let selectedLevel      = _saved.level      || 1;
-let selectedTapMode    = _saved.tapMode    || false;
 let selectedCorrection = _saved.correctionMode || false;
 let selectedRoundCount = _saved.roundCount || ROUND_COUNT;
 
@@ -27,14 +26,13 @@ window.addEventListener('resize', () => checkOrientation());
 function saveSettings() {
   const s = loadProgress();
   s.level          = selectedLevel;
-  s.tapMode        = selectedTapMode;
   s.correctionMode = selectedCorrection;
   s.roundCount     = selectedRoundCount;
   saveProgress(s);
 }
 
-function launchGame(level, tapMode, corrMode, roundCount) {
-  startGame(level, tapMode, corrMode, roundCount);
+function launchGame(level, corrMode, roundCount) {
+  startGame(level, corrMode, roundCount);
 }
 
 function syncToggle(id, value) {
@@ -64,21 +62,15 @@ document.querySelectorAll('.level-btn').forEach(btn => {
     selectedLevel = Number(btn.dataset.level);
     saveSettings();
     await audioUnlock();
-    launchGame(selectedLevel, selectedTapMode, selectedCorrection, selectedRoundCount);
+    launchGame(selectedLevel, selectedCorrection, selectedRoundCount);
   });
 });
 
 // ── Settings screen ──────────────────────────────────────
 document.getElementById('btn-open-settings').addEventListener('click', () => {
-  syncToggle('toggle-tap', selectedTapMode);
   syncToggle('toggle-correction', selectedCorrection);
   renderCountChips();
   showScreen('settings');
-});
-
-document.getElementById('toggle-tap').addEventListener('click', function () {
-  selectedTapMode = !selectedTapMode;
-  this.classList.toggle('on', selectedTapMode);
 });
 
 document.getElementById('toggle-correction').addEventListener('click', function () {
@@ -87,10 +79,8 @@ document.getElementById('toggle-correction').addEventListener('click', function 
 });
 
 document.getElementById('btn-settings-reset').addEventListener('click', () => {
-  selectedTapMode    = false;
   selectedCorrection = false;
   selectedRoundCount = ROUND_COUNT;
-  syncToggle('toggle-tap', false);
   syncToggle('toggle-correction', false);
   renderCountChips();
 });
@@ -108,7 +98,7 @@ document.getElementById('btn-settings-done').addEventListener('click', () => {
 // ── Play screen buttons ──────────────────────────────────
 document.getElementById('btn-retry').addEventListener('click', () => {
   const s = getCurrentSettings();
-  startGame(s.level, s.tapMode, s.correctionMode, s.roundCount);
+  startGame(s.level, s.correctionMode, s.roundCount);
 });
 
 document.getElementById('btn-quit').addEventListener('click', () => {
