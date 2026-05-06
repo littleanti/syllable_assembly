@@ -1,7 +1,43 @@
 <!-- Parent: ../AGENTS.md -->
-<!-- Updated: 2026-04-26 -->
+<!-- Updated: 2026-05-05 -->
 
 # 2_syllable_assembly — 음절 조립소
+
+## Status
+**구현 완료** — Vanilla JS + CSS, 빌드 단계 없음. PWA Service Worker 포함.
+
+## Key Files
+
+| File | Description |
+|------|-------------|
+| `index.html` | 앱 진입점 — start/settings/play/end/rotate 화면 포함 |
+| `package.json` | `npm run dev` → `npx serve . -l 3002`, `npm run live` → live-server 3002 |
+| `service-worker.js` | PWA 오프라인 캐시 |
+
+### Key JS Modules (`src/js/`)
+
+| Module | 역할 |
+|--------|------|
+| `config.js` | 순수 상수 (ROUND_COUNT 등) |
+| `hangul.js` | 조합(`compose`) / 분해(`decompose`) / 모음 형태(`getVowelShape`) / 자모 발음(`jamoToPhoneme`) |
+| `utils.js` | 범용 유틸리티 |
+| `state.js` | 전역 상태 (`board`, `target`, `lessonQueue`, `lessonIdx`, `stars`) |
+| `storage.js` | localStorage 영속화 (level, tapMode, correctionMode, roundCount) |
+| `lesson.js` | 레벨별 음절 풀 혼합, `buildPalette()` 오답 블록 생성 |
+| `layout.js` | 모음 형태(수직/수평)에 따라 dock grid-template 전환 |
+| `pointer.js` | Pointer Events API 기반 드래그 앤 드롭 + 슬롯 스냅 |
+| `tap.js` | 탭-탭 모드 — 자모 선택 → 슬롯 자동 배치 |
+| `audio.js` | Web Speech API TTS (자모 단독 + 조합 음절 발음) |
+| `ui.js` | 화면 전환 (`showScreen`), 회전 감지 (`checkOrientation`) |
+| `game.js` | 게임 루프 — `startRound`, `onJamoPlaced`, `handleSuccess/Failure` |
+| `main.js` | 진입점 — 이벤트 바인딩, 설정 저장/로드, `startGame()` 호출 |
+
+### Key Data Files (`src/data/`)
+
+| File | 역할 |
+|------|------|
+| `jamo.js` | 초성/중성/종성 배열 및 음절 풀 상수 |
+| `lessons.js` | 레벨별 음절 데이터셋 (`SYLLABLES_NO_JONG`, `SYLLABLES_WITH_JONG`, `SYLLABLES_DOUBLE_CHO`, `SYLLABLES_DOUBLE_JONG`) |
 
 ## Purpose
 한글의 초성·중성·종성이 2차원 평면상에 결합되는 원리를 직접 조립하며 체화하는 파닉스 게임.

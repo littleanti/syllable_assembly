@@ -41,6 +41,9 @@
   --block-radius:    14px;
   --block-font:      2.4rem;
 
+  /* ── Shadow ── */
+  --shadow: rgba(45, 48, 71, 0.15);
+
   /* ── Animation ── */
   --spring-ms:  280ms;
   --reward-ms:  1400ms;
