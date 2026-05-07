@@ -11,7 +11,7 @@
 
 /* ── Start screen ──────────────────────────────────────── */
 #screen-start {
-  background: linear-gradient(160deg, #fff6e4 0%, #ffe8d6 100%);
+  background: transparent;
 }
 
 .start-icon {
@@ -115,6 +115,7 @@
 .level-btn-4:active { box-shadow: 0 1px 0 var(--navy-dark); }
 
 .btn-settings {
+  font-family: 'Jua', sans-serif;
   font-size: 1rem;
   font-weight: 600;
   color: var(--color-text-dim);
@@ -133,7 +134,7 @@
   align-items: center;
   padding: 10px 20px 20px;
   gap: 0;
-  background: var(--color-bg);
+  background: transparent;
   overflow-y: auto;
 }
 
@@ -296,13 +297,13 @@
 .chip {
   font-family: 'Gowun Dodum', sans-serif;
   padding: 8px 16px;
-  background: var(--color-surface2);
-  border: 2px solid var(--color-border);
+  background: var(--gray);
+  border: 2px solid transparent;
   border-radius: 100px;
   font-size: 0.95rem;
   cursor: pointer;
-  transition: all 0.12s;
-  color: var(--color-text);
+  transition: all 0.15s;
+  color: var(--navy);
   font-weight: 700;
 }
 .chip:active { transform: translateY(1px); }
@@ -591,7 +592,7 @@
 
 /* ── End screen ────────────────────────────────────────── */
 #screen-end {
-  background: linear-gradient(160deg, #fff6e4 0%, #ffe8d6 100%);
+  background: transparent;
   text-align: center;
   padding: 20px 16px;
   gap: 0;

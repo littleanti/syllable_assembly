@@ -1,9 +1,16 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+html {
+  background: var(--cream);
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(255, 181, 181, 0.3) 0%, transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(107, 202, 184, 0.25) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(255, 209, 102, 0.15) 0%, transparent 55%);
+}
+
 html, body {
   width: 100%; height: 100%;
   overflow: hidden;
-  background: var(--color-bg);
   color: var(--color-text);
   font-family: 'Jua', 'Gowun Dodum', sans-serif;
   -webkit-tap-highlight-color: transparent;
