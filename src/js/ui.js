@@ -71,19 +71,24 @@ export function showReward() {
   }
 }
 
-export function showEndScreen(stars, total) {
+export function showEndScreen(correct, total) {
   showScreen('end');
-  const el = document.getElementById('end-stars');
-  if (el) el.textContent = `${'⭐'.repeat(stars)}`;
-  const msg = document.getElementById('end-message');
-  if (msg) {
-    const pct = stars / total;
-    msg.textContent =
-      pct >= 0.9 ? '완벽해요! 🎉' :
-      pct >= 0.7 ? '아주 잘했어요! 😊' :
-      pct >= 0.5 ? '잘했어요! 👍' :
-      '조금만 더 연습해요! 💪';
-  }
+  const pct = total > 0 ? correct / total : 0;
+  const { title, emojis } = getEndingMessage(pct);
+
+  document.getElementById('end-celebrate').textContent = emojis;
+  document.getElementById('end-title').textContent     = title;
+  document.getElementById('end-score').textContent     = correct;
+  document.getElementById('end-total').textContent     = total;
+  document.getElementById('end-total2').textContent    = total;
+  document.getElementById('end-accuracy').textContent  = `정답률 ${Math.round(pct * 100)}%`;
+}
+
+function getEndingMessage(pct) {
+  if (pct === 1)   return { title: '완벽해요! 천재!', emojis: '🏆👑✨' };
+  if (pct >= 0.7)  return { title: '정말 잘했어요!',  emojis: '🎉⭐🎊' };
+  if (pct >= 0.4)  return { title: '잘했어요!',       emojis: '😊👍💫' };
+  return                  { title: '다시 해볼까요?',  emojis: '💪🌱📚' };
 }
 
 export function showPartialFeedback(msg) {

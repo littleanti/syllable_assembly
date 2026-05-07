@@ -173,7 +173,7 @@ async function handleSuccess(lastChar) {
   await sleep(200);
 
   if (isLessonComplete()) {
-    showEndScreen(state.lessonIdx, state.stars);
+    showEndScreen(state.stars, state.lessonIdx);
   } else {
     startRound();
   }
@@ -192,7 +192,7 @@ async function handleFailure() {
   updateProgress(state.lessonIdx, state.stars, state.roundCount);
 
   if (isLessonComplete()) {
-    showEndScreen(state.lessonIdx, state.stars);
+    showEndScreen(state.stars, state.lessonIdx);
   } else {
     startRound();
   }

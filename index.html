@@ -125,12 +125,21 @@
 
 <!-- ── End screen ───────────────────────────────────── -->
 <div id="screen-end" class="screen" hidden>
-  <div class="end-title">완성! 🎉</div>
-  <div id="end-stars"></div>
-  <div id="end-message"></div>
+  <div class="celebration-emojis" id="end-celebrate">🎉✨🎊</div>
+  <h2 id="end-title">완성!</h2>
+  <p class="end-message">총 <span id="end-total">10</span>문제 중</p>
+  <div class="final-score">
+    <span class="num" id="end-score">0</span>
+    <span style="opacity:0.4;">/</span>
+    <span id="end-total2">10</span>
+  </div>
+  <p class="end-message" id="end-accuracy">정답률 0%</p>
   <div class="end-buttons">
     <button id="btn-retry" class="btn-primary">다시 하기 🔄</button>
-    <button id="btn-home"  class="btn-secondary">🏠 홈으로</button>
+    <button id="btn-open-settings-end" class="btn-secondary">⚙️ 설정 바꾸기</button>
+  </div>
+  <div class="end-buttons" style="margin-top: 14px;">
+    <button id="btn-home" class="btn-ghost">🏠 홈으로</button>
   </div>
 </div>
 

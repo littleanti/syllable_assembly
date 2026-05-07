@@ -106,6 +106,12 @@ document.getElementById('btn-quit').addEventListener('click', () => {
 });
 
 // ── End screen buttons ───────────────────────────────────
+document.getElementById('btn-open-settings-end').addEventListener('click', () => {
+  syncToggle('toggle-correction', selectedCorrection);
+  renderCountChips();
+  showScreen('settings');
+});
+
 document.getElementById('btn-home').addEventListener('click', () => {
   showScreen('start');
 });

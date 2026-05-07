@@ -203,3 +203,16 @@ main                 # 배포 안정 버전 (M7 이후)
 - `docs/PRD.md` — 제품 요구사항
 - `docs/TRD.md` — 기술 설계, 수동 테스트 체크리스트
 - 인접: `../../1_chosung_quiz/docs/` — 동일 패턴 참조
+
+---
+
+## 디자인 일관성 체크리스트 (홈·설정 화면)
+
+시작·설정 화면 구현 전·후 아래 항목을 확인한다 (기준: `1_chosung_quiz`).
+
+- [ ] 제목에 `font-family: 'Jua', sans-serif` 적용
+- [ ] 설명·본문에 `font-family: 'Gowun Dodum', sans-serif` 적용
+- [ ] `tokens.css` CSS 변수 팔레트 — 1단계 기준 색상·배경·간격 동일 적용
+- [ ] 큰 라운드 버튼 스타일 (`1_chosung_quiz/src/css/components.css` 참조)
+- [ ] 배경 색상 `--color-bg` 동일 사용
+- [ ] 1단계 홈·설정 화면과 나란히 놓고 시각적 통일감 육안 확인
