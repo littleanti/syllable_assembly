@@ -171,13 +171,20 @@ npm run live  # npx live-server --port=3002
 
 시작 화면(`start-screen`), 설정 화면(`settings-screen`), 게임 완료 화면(`end-screen`)은 `1_chosung_quiz`의 디자인 시스템을 계승한다.
 
-| 요소 | 기준 |
+| 요소 | 규격 |
 |------|------|
-| 제목 폰트 | `Jua` (Google Fonts) |
-| 설명·본문 폰트 | `Gowun Dodum` (Google Fonts) |
-| 버튼 | `1_chosung_quiz/src/css/components.css` 큰 라운드 버튼 스타일 |
-| 색감 | `1_chosung_quiz/src/css/tokens.css` CSS 변수 팔레트 |
-| 배경 | `--color-bg` 동일 사용 |
+| 시작·완료 화면 제목 | `font-family: 'Jua', sans-serif` |
+| 시작 화면 제목 크기 | `font-size: 3rem; letter-spacing: 2px; color: var(--coral)` |
+| 설정 화면 제목 크기 | `font-size: 1.8rem; color: var(--coral)` |
+| 완료 화면 제목 크기 | `font-size: 2.1rem; color: var(--coral)` |
+| 설명·본문 | `font-family: 'Gowun Dodum', sans-serif; font-size: clamp(0.9rem, 3vw, 1.2rem)` |
+| 버튼 기본 (`.btn`) | `font-family: 'Jua', sans-serif; font-size: 1.2rem; padding: 14px 28px; border-radius: 100px` |
+| 버튼 대형 (`.btn.big`) | `font-size: 1.45rem; padding: 16px 44px; border-radius: 100px` |
+| 버튼 소형 (`.btn.small`) | `font-size: 1rem; padding: 10px 20px; border-radius: 100px` |
+| 버튼 색상 | `background: var(--coral); color: #fff; box-shadow: 0 5px 0 var(--coral-dark)` |
+| 버튼 눌림 | `transform: translateY(4px); box-shadow: 0 1px 0 var(--coral-dark)` |
+| 배경 | `background: var(--cream)` (`#FFF6E4`) |
+| 색상 변수 | `1_chosung_quiz/src/css/tokens.css` 팔레트 동일 적용 |
 
 > 플레이 화면(가로 모드·자모 블록 레이아웃)은 이 게임 특유의 방식을 사용.  
 > 상세 스펙: `docs/TRD.md §11` 및 `docs/PLAN.md` 디자인 일관성 체크리스트 참조.

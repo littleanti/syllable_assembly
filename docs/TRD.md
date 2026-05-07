@@ -317,14 +317,37 @@ iOS Safari 미지원 → CSS `@media (orientation: portrait)` 로 회전 안내 
 
 ## 11. 홈·설정·완료 화면 디자인 시스템
 
-시작 화면(`start-screen`), 설정 화면(`settings-screen`), 게임 완료 화면(`end-screen`)은 `1_chosung_quiz` 의 디자인 시스템을 계승한다.
+시작 화면(`start-screen`), 설정 화면(`settings-screen`), 게임 완료 화면(`end-screen`)은 `1_chosung_quiz` 의 디자인 시스템을 계승한다. 아래 수치는 `1_chosung_quiz/src/css/screens.css` · `components.css` 의 실제 값이다.
 
-| 요소 | 구현 방법 |
+### 폰트
+
+| 요소 | 규격 |
 |---|---|
-| 폰트 로드 | Google Fonts `Jua`(제목), `Gowun Dodum`(설명·본문) — 1단계와 동일 |
-| CSS 변수 | `tokens.css` — `1_chosung_quiz/src/css/tokens.css` 기준 팔레트 동일 적용 |
-| 버튼 컴포넌트 | `components.css` — 1단계 버튼 스타일 (큰 라운드 버튼, CSS 변수 색상) |
-| 배경 | `--color-bg` 변수 — 1단계와 동일한 밝은 배경 |
+| 폰트 로드 | `<link>` Google Fonts — `Jua`, `Gowun Dodum` (1단계와 동일) |
+| 시작·완료 화면 제목 | `font-family: 'Jua', sans-serif` |
+| 시작 화면 제목 크기 | `font-size: 3rem; letter-spacing: 2px; color: var(--coral)` |
+| 설정 화면 제목 크기 | `font-size: 1.8rem; color: var(--coral)` |
+| 완료 화면 제목 크기 | `font-size: 2.1rem; color: var(--coral)` |
+| 설명·부제목·본문 | `font-family: 'Gowun Dodum', sans-serif; font-size: clamp(0.9rem, 3vw, 1.2rem)` |
+| 섹션 레이블 (설정) | `font-family: 'Jua', sans-serif; font-size: 1.05rem` |
+
+### 버튼
+
+| 요소 | 규격 |
+|---|---|
+| 버튼 레이블 폰트 | `font-family: 'Jua', sans-serif; letter-spacing: 0.5px` |
+| 버튼 기본 (`.btn`) | `font-size: 1.2rem; padding: 14px 28px; border-radius: 100px` |
+| 버튼 대형 (`.btn.big`) | `font-size: 1.45rem; padding: 16px 44px; border-radius: 100px` |
+| 버튼 소형 (`.btn.small`) | `font-size: 1rem; padding: 10px 20px; border-radius: 100px` |
+| 버튼 기본 색상 | `background: var(--coral); color: #fff; box-shadow: 0 5px 0 var(--coral-dark)` |
+| 버튼 눌림 효과 | `transform: translateY(4px); box-shadow: 0 1px 0 var(--coral-dark)` |
+
+### 색상·레이아웃
+
+| 요소 | 규격 |
+|---|---|
+| 색상 변수 출처 | `1_chosung_quiz/src/css/tokens.css` (`--coral #FF7757`, `--navy #2D3047`, `--cream #FFF6E4`, `--mint #6BCAB8`, `--yellow #FFD166`) |
+| 배경 | `background: var(--cream)` (`#FFF6E4`) |
 | 레이아웃 | 수직 중앙 정렬, 카드형 컨테이너 (`start-screen`, `settings-screen`, `end-screen`) |
 
 > 플레이 화면은 이 게임 특유의 가로 모드·자모 블록 레이아웃을 사용한다.  
