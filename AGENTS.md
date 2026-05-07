@@ -166,3 +166,18 @@ npm run live  # npx live-server --port=3002
 - [ ] 수평 모음(ㅗ, ㅜ, ㅡ) dock 레이아웃 수직 배치 확인
 - [ ] 세로 화면 진입 시 회전 안내 표시
 - [ ] 설정 저장 — 새로고침 후 이전 설정 복원
+
+## Design Consistency (홈·설정·완료 화면)
+
+시작 화면(`start-screen`), 설정 화면(`settings-screen`), 게임 완료 화면(`end-screen`)은 `1_chosung_quiz`의 디자인 시스템을 계승한다.
+
+| 요소 | 기준 |
+|------|------|
+| 제목 폰트 | `Jua` (Google Fonts) |
+| 설명·본문 폰트 | `Gowun Dodum` (Google Fonts) |
+| 버튼 | `1_chosung_quiz/src/css/components.css` 큰 라운드 버튼 스타일 |
+| 색감 | `1_chosung_quiz/src/css/tokens.css` CSS 변수 팔레트 |
+| 배경 | `--color-bg` 동일 사용 |
+
+> 플레이 화면(가로 모드·자모 블록 레이아웃)은 이 게임 특유의 방식을 사용.  
+> 상세 스펙: `docs/TRD.md §11` 및 `docs/PLAN.md` 디자인 일관성 체크리스트 참조.

@@ -315,9 +315,9 @@ iOS Safari 미지원 → CSS `@media (orientation: portrait)` 로 회전 안내 
 
 빌드 단계 불필요. 단, Service Worker 캐시 파일 목록은 릴리즈 시 갱신 필요.
 
-## 11. 홈·설정 화면 디자인 시스템
+## 11. 홈·설정·완료 화면 디자인 시스템
 
-시작 화면(`start-screen`)과 설정 화면(`settings-screen`)은 `1_chosung_quiz` 의 디자인 시스템을 계승한다.
+시작 화면(`start-screen`), 설정 화면(`settings-screen`), 게임 완료 화면(`end-screen`)은 `1_chosung_quiz` 의 디자인 시스템을 계승한다.
 
 | 요소 | 구현 방법 |
 |---|---|
@@ -325,10 +325,10 @@ iOS Safari 미지원 → CSS `@media (orientation: portrait)` 로 회전 안내 
 | CSS 변수 | `tokens.css` — `1_chosung_quiz/src/css/tokens.css` 기준 팔레트 동일 적용 |
 | 버튼 컴포넌트 | `components.css` — 1단계 버튼 스타일 (큰 라운드 버튼, CSS 변수 색상) |
 | 배경 | `--color-bg` 변수 — 1단계와 동일한 밝은 배경 |
-| 레이아웃 | 수직 중앙 정렬, 카드형 컨테이너 (`start-screen`, `settings-screen`) |
+| 레이아웃 | 수직 중앙 정렬, 카드형 컨테이너 (`start-screen`, `settings-screen`, `end-screen`) |
 
 > 플레이 화면은 이 게임 특유의 가로 모드·자모 블록 레이아웃을 사용한다.  
-> 시작·설정 화면만 위 규격을 의무 준수한다.
+> 시작·설정·완료 화면만 위 규격을 의무 준수한다.
 
 ## 10. 미해결 기술 이슈
 

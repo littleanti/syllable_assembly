@@ -23,5 +23,6 @@
 - 수동 테스트 체크리스트는 `TRD.md` §8을 기준으로 한다.
 - 자동화 테스트 런너 없음 — 새 기능 추가 시 TRD에 체크리스트 항목도 추가 권장.
 - 인접 단계(`../1_chosung_quiz/docs/`, `../3_word_network/docs/`)와 데이터/컴포넌트 호환성 유지.
+- **시리즈 공통 UI**: `TRD.md §11 홈·설정·완료 화면 디자인 시스템`과 `PLAN.md` 디자인 일관성 체크리스트에 start/settings/end-screen 규격이 명시됨.
 
 <!-- MANUAL: -->
