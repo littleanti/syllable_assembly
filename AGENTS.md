@@ -11,7 +11,7 @@
 | File | Description |
 |------|-------------|
 | `index.html` | 앱 진입점 — start/settings/play/end/rotate 화면 포함 |
-| `package.json` | `npm run dev` → `npx serve . -l 3002`, `npm run live` → live-server 3002 |
+| `package.json` | `npm run dev` → `npx serve . -l 4322`, `npm run live` → live-server 4322 |
 | `service-worker.js` | PWA 오프라인 캐시 |
 
 ### Key JS Modules (`src/js/`)
@@ -142,11 +142,11 @@ main.js → startGame(level, tapMode, corrMode, roundCount)
 ## Dev Server
 
 ```bash
-npm run dev   # npx serve . -l 3002
-npm run live  # npx live-server --port=3002
+npm run dev   # npx serve . -l 4322
+npm run live  # npx live-server --port=4322
 ```
 
-포트: **3002** (`1_chosung_quiz`=3000 과 충돌 방지)
+포트: **4322** (`1_chosung_quiz`=3000 과 충돌 방지)
 
 ## Key Behaviors to Preserve
 

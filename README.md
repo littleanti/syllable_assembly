@@ -29,8 +29,8 @@
 ## 실행
 
 ```bash
-npm run dev      # port 3002 (serve)
-npm run live     # port 3002 (live-server, 파일 변경 시 자동 새로고침)
+npm run dev      # port 4322 (serve)
+npm run live     # port 4322 (live-server, 파일 변경 시 자동 새로고침)
 ```
 
 ## 파일 구조

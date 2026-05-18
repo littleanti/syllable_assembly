@@ -15,7 +15,7 @@
 | 입력 | Pointer Events API | 마우스/터치/펜 통합 (iOS·Android 동시 지원) |
 | 오디오 | Web Audio API + 사전 디코딩 캐시 | 자모/음절 즉시 재생, 자동재생 정책 우회 |
 | 폰트 | Google Fonts (Jua, Gowun Dodum) `font-display: swap` | 한글 친화, FOIT 회피 |
-| 개발 서버 | `npx serve -p 3002` | 부모 AGENTS.md 포트 컨벤션 |
+| 개발 서버 | `npx serve -p 4322` | 부모 AGENTS.md 포트 컨벤션 |
 | 저장소 | `localStorage` (P1), `IndexedDB` (P2) | 5MB 한도 → 누적 데이터는 IndexedDB |
 | 배포 | 정적 호스팅 + PWA Manifest + Service Worker | 홈 화면 설치, 오프라인 |
 
@@ -307,7 +307,7 @@ iOS Safari 미지원 → CSS `@media (orientation: portrait)` 로 회전 안내 
 
 | 옵션 | 명령 | 비고 |
 |---|---|---|
-| 로컬 | `npx serve -p 3002` | 부모 AGENTS.md 포트 |
+| 로컬 | `npx serve -p 4322` | 부모 AGENTS.md 포트 |
 | GitHub Pages | `gh-pages` 브랜치 푸시 | HTTPS 자동 |
 | Netlify | 드래그 앤 드롭 | PWA 헤더 자동 |
 | Cloudflare Pages | Git 연동 | 한국 latency 양호 |
