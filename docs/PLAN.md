@@ -16,17 +16,15 @@ M0–M6 구현 완료. M7 코드 측 작업(반응형 CSS, PWA 아이콘, will-c
 
 ## 🧭 마일스톤 개요
 
-| 마일스톤 | 핵심 산출 | 종료 기준 (Definition of Done) |
-|---|---|---|
 | 마일스톤 | 상태 | 핵심 산출 |
 |---|---|---|
 | M0 | ✅ 완료 | PRD.md / TRD.md / PLAN.md |
 | M1 | ✅ 완료 | `hangul.js` — compose/decompose/getVowelShape/jamoToPhoneme |
 | M2 | ✅ 완료 | `pointer.js` — DragManager + 자성 스냅 + spring-back |
-| M3 | ✅ 완료 | `audio.js` — speechSynthesis + iOS AudioContext unlock |
+| M3 | ✅ 완료 | `audio.js` — Web Audio API + iOS AudioContext unlock |
 | M4 | ✅ 완료 | 전체 게임 루프 (10라운드, 무받침) — 실사용자 테스트 통과 |
-| M5 | ✅ 완료 | 받침 토글 + 부분 정답 격려 (F13·F14·F17) |
-| M6 | ✅ 완료 | 탭모드(F12) + 리듬(F15) + 진척도 저장(F18) + 테마(F19) |
+| M5 | ✅ 완료 | 받침 토글 + 부분 정답 격려 (F14·F17) |
+| M6 | ✅ 완료 | 탭모드(F12) + 교정모드 + 라운드수 선택 + 진척도 저장(F18) |
 | M7 | 🔄 진행 중 | 반응형 CSS·PWA 아이콘·will-change 완료 / **실기기 테스트 대기** |
 | M8 | ⏳ 예정 | 발음 평가, IndexedDB SRL, 부모 대시보드 |
 
@@ -109,18 +107,21 @@ M0–M6 구현 완료. M7 코드 측 작업(반응형 CSS, PWA 아이콘, will-c
 
 종료 기준: `갑`, `눈`, `과`, `의` 결합 동작 검증. 불법 조합(예: ㄲ+ㅏ+ㅄ 같은 비빈도 음절)은 화이트리스트에서 제외되어 출제되지 않음.
 
-## 🎶 M6 — 확장 기능
+## 🎶 M6 — 확장 기능 (✅ 완료)
 
-| 기능 | 설명 | 우선 |
+| 기능 | 설명 | 상태 |
 |---|---|---|
-| F12 탭-탭 모드 | 자모 탭 → 슬롯 탭 (드래그 대안) | High |
-| F15 리듬 모드 | 4/4박자 BGM + 비트 가중치 | Med |
-| F16 자모 범위 설정 | 교사·부모용 부분집합 | High |
-| F17 부분 정답 격려 | "거의 다 됐어요!" | Med |
-| F18 진척도 영속화 | localStorage `2sa:progress` 키 | High |
-| F19 테마 선택 | 우주선/냄비/가마솥 토글 | Low |
+| F12 탭-탭 모드 | TapManager — 자모 탭 → 슬롯 자동 배치 (드래그와 동시 지원) | ✅ 완료 |
+| 교정 모드 (correctionMode) | 자모 배치 즉시 정오 판정 — toggle-correction 설정, OFF 시 모두 채운 후 일괄 검사 | ✅ 완료 |
+| 라운드 수 선택 | 5/10/15/20문제 chip 선택 (COUNT_OPTIONS) | ✅ 완료 |
+| F14 받침 단계 토글 | 레벨 3/4에서 종성 슬롯 자동 추가 (setJongVisible) | ✅ 완료 |
+| F17 부분 정답 격려 | showPartialFeedback("거의 다 됐어요! 받침을 놓아요 👇") | ✅ 완료 |
+| F18 진척도 영속화 | localStorage 2sa:progress 키 — level/correctionMode/roundCount/stars 저장 | ✅ 완료 |
+| F15 리듬 모드 | 4/4박자 BGM + 비트 가중치 | 🔲 미구현 (M8 이후) |
+| F16 자모 범위 설정 | jamoFilter — 교사·부모용 부분집합 | 🔲 미구현 (M8 이후) |
+| F19 테마 선택 | 우주선/냄비/가마솥 토글 | 🔲 미구현 (단일 테마 고정) |
 
-종료 기준: 기능 단위 수동 체크리스트 통과 + 모든 확장 토글이 MVP 흐름을 깨지 않음.
+종료 기준: 기능 단위 수동 체크리스트 통과 + 모든 확장 토글이 MVP 흐름을 깨지 않음. ✅ 완료
 
 ## 🧪 M7 — 모바일 QA + 출시
 
@@ -178,23 +179,35 @@ main                 # 배포 안정 버전 (M7 이후)
 
 커밋 컨벤션: `feat:`, `fix:`, `refactor:`, `docs:`, `style:`, `perf:`, `a11y:`
 
-## 📝 릴리즈 노트 (예정)
+## 📝 릴리즈 노트
 
-### v0.1.0 — M4 MVP (예정)
-- 받침 없는 음절 10종 결합 가능
-- iPad / 갤럭시 탭 가로 모드 동작
-- Web Audio 자모/음절 발음
-- 자성 스냅 드래그
+### v0.1.0 — M1~M4 (Walking Skeleton)
+- 받침 없는 음절 10종 결합 가능 (SYLLABLES_L1)
+- DragManager 자성 스냅 + spring-back
+- Web Audio API (speech synthesis) — 자모/음절 발음
+- 시작/플레이/종료 화면
 
-### v0.5.0 — M5/M6
-- 받침 + 복합 모음
-- 탭-탭 모드, 자모 범위 필터
-- 리듬 모드 (옵션)
+### v0.2.0 — M5
+- 받침(종성) 지원 — 레벨 3/4 (SYLLABLES_L3_SINGLE/L4_COMPLEX)
+- 부분 정답 격려 메시지 (showPartialFeedback)
+- 복합 모음 가로형 처리 (단계 1)
 
-### v1.0.0 — M7
-- PWA 정식 배포
-- 실기기 매트릭스 통과
-- 진척도 영속화
+### v1.0.0 (현재) — M6
+- TapManager — 탭-탭 입력 모드 (F12)
+- 교정 모드 (correctionMode) — 즉시 거부/일괄 검사 선택
+- 레벨 1~4 시스템 (받침 없음 → 겹받침 단계적 진입)
+  - L1: 받침 없음 (SYLLABLES_L1)
+  - L2: 쌍자음 초성 (SYLLABLES_L2_SINGLE/L2_DOUBLE, 85:15 비율)
+  - L3: 홑받침 (SYLLABLES_L3_SINGLE/L3_DOUBLE)
+  - L4: 겹받침 (SYLLABLES_L4_COMPLEX, 50:50 비율)
+- 라운드 수 선택 (5/10/15/20, COUNT_OPTIONS)
+- 진척도 localStorage 저장 (2sa:progress 키)
+- Service Worker 등록 (PWA 기초)
+
+### v2.0.0 (예정) — M7
+- PWA 매니페스트 완성 (icons 192/512, orientation: landscape)
+- 반응형 CSS 최적화
+- 실기기 매트릭스 통과 (iPad/갤럭시 탭/보급형 폰)
 
 ## 📚 참고 문서
 

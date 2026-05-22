@@ -80,50 +80,61 @@ main.js
 ```
 
 ### 2.3 상태 모델
+
+**저장소 (localStorage '2sa:progress' 키)**
 ```js
-state = {
-  settings: {
-    theme: 'rocket' | 'pot' | 'cauldron',
-    inputMode: 'drag' | 'tap',          // F12 탭-탭 모드
-    rhythmMode: boolean,                 // F15
-    jamoFilter: { cho: Set, jung: Set, jong: Set } | null,  // F16
-    audioReady: boolean,                 // 자동재생 정책 통과 플래그
-  },
-  lesson: {
-    queue: SyllableTarget[],             // 이번 세션 출제 큐
-    currentIdx: number,
-    targetSyllable: string,              // 예: '갑'
-    targetCho: string,                   // 'ㄱ'
-    targetJung: string,                  // 'ㅏ'
-    targetJong: string | null,           // 'ㅂ' 또는 null
-  },
-  board: {
-    placed: { cho: Jamo|null, jung: Jamo|null, jong: Jamo|null },
-    draggingId: string | null,
-    pointerId: number | null,
-    snapHints: Set<SlotId>,              // 자성 활성화된 슬롯
-  },
-  progress: {
-    stars: number,
-    completedSyllables: Set<string>,
-    streakCount: number,
-    sessionStartedAt: number,
-  },
+savedState = {
+  level: 1|2|3|4,          // 1=받침없음, 2=쌍자음, 3=홑받침, 4=겹받침
+  correctionMode: boolean,  // true: 틀린 즉시 거부, false: 모두 채운 후 검사
+  roundCount: 5|10|15|20,  // 라운드 수
+  stars: number,            // 누적 별 개수 (현재 세션 종료 후 누적)
 }
 ```
 
-### 2.4 화면 상태 머신
+**런타임 상태 (state.js — in-memory)**
+```js
+state = {
+  audioReady: boolean,       // 자동재생 정책 통과 플래그
+  currentScreen: 'start'|'settings'|'play'|'end',
+  board: { cho: string|null, jung: string|null, jong: string|null },
+  target: {                  // 현재 라운드 목표
+    syllable: string,        // 예: '가', '갑'
+    cho: string,             // 초성 문자 (예: 'ㄱ')
+    jung: string,            // 중성 문자 (예: 'ㅏ')
+    jong: string|null,       // 종성 문자 (예: 'ㅂ') 또는 null
+    hasJong: boolean,
+    choIdx: number, jungIdx: number, jongIdx: number,
+  },
+  lessonQueue: string[],     // 이번 세션 출제 음절 큐 (shuffle된 배열)
+  lessonIdx: number,         // 현재 진행 인덱스
+  stars: number,             // 이번 세션 별 획득 수
+  level: number,             // 현재 레벨 (1~4)
+  roundCount: number,        // 이번 세션 라운드 수
+}
 ```
-start ──→ orientation-prompt ──→ play ──→ end
-  │             │                  ↑        │
-  ↓             ↓ (가로 감지)      │        ↓
-settings ───────────────────── (다음 라운드 / 다시하기)
+
+### 2.4 레벨별 음절 풀
+
+| 레벨 | 음절 유형 | 팔레트 구성 | 비고 |
+|---|---|---|---|
+| 1 | 받침 없는 음절 (가, 나, 다...) | 초성(정답+오답2) + 중성(정답+오답2) | CHO_SINGLE + JUNG_CHARS 풀 |
+| 2 | 쌍자음(ㄲ,ㄸ,ㅃ,ㅆ,ㅉ) 초성 포함. 홑자음 85% + 쌍자음 15% | 레벨1과 동일 구성 | CHO_ALL 풀 사용, 음절 비율 조정 |
+| 3 | 홑받침(ㄱ,ㄴ,ㄷ...) 포함. 홑+쌍자음 초성 혼합 | 초성(정답+오답2) + 중성(정답+오답2) + 종성(정답+오답1) | JONG_SINGLE 풀, 홑자음 초성 |
+| 4 | 겹받침(ㄳ,ㄵ,ㄶ...) 50% + 홑받침 50% | 레벨3과 동일 구성 | JONG_ALL 풀 사용, 음절 비율 조정 |
+
+### 2.5 화면 상태 머신
+```
+start ──→ settings ──→ play ──→ end
+  │          ↑          ↑      │
+  ├──────────┴──────────┘      │
+  └────────────────────────────┘
 ```
 
 전이 시 부작용:
-- 모든 전이 → `pointer.releaseAll()` + `audio.stopAll()`
-- `play` 진입 → `lesson.next()` + `layout.applyVowelShape(jung)`
+- 모든 전이 → `drag.releaseAll()` (드래그 중단)
+- `play` 진입 → `initLesson()` + `layout.applyVowelShape(jung)` + 자모 팔레트 렌더링
 - `start` → `play` 첫 진입에서만 `audio.unlock()` (사용자 제스처 게이트)
+- 레벨 선택: 홈 화면 레벨 버튼(data-level="1|2|3|4")으로 즉시 게임 시작
 
 ## 3. 핵심 알고리즘
 
@@ -177,7 +188,7 @@ const VOWEL_SHAPE = {
 // pointerup → 가장 가까운 활성 슬롯에 배치 시도
 //   합법(자음↔초성, 모음↔중성, 받침↔종성)이면 commit, 아니면 spring-back
 
-const SNAP_PX = 20 * window.devicePixelRatio; // dp → px
+const SNAP_PX = 30 * window.devicePixelRatio; // dp → px (확장된 거리)
 const TOUCH_TARGET_PX = 64 * window.devicePixelRatio;
 ```
 
@@ -185,6 +196,43 @@ iOS Safari 주의점:
 - `touch-action: none` 을 드래그 가능 요소에 부여 (스크롤 충돌 방지)
 - `passive: false` 로 `touchmove` 등록 시에만 `preventDefault` 가능 — Pointer Events는 자동 처리
 - 더블탭 줌은 `<meta name="viewport" content="..., user-scalable=no">` 로 차단 (접근성 트레이드오프 인지)
+
+### 3.4 교정 모드 (correctionMode)
+
+**ON 모드 (correctionMode = true)**:
+```js
+onJamoPlaced(char, category, slotName):
+  state.board[slotName] = char
+  const correctChar = { cho, jung, jong }[slotName]
+  if (char !== correctChar):
+    슬롯 엘리먼트에 'reject-flash' 클래스 추가 (380ms)
+    playIncorrect() 소리
+    state.board[slotName] = null (자모 원위치)
+    return  // 계속 진행 안 함
+  else:
+    정상 배치 진행
+```
+
+**OFF 모드 (correctionMode = false, 기본)**:
+```js
+onJamoPlaced(char, category, slotName):
+  state.board[slotName] = char
+  updateSlotDisplay(slotName, char)
+  speak(jamoToPhoneme(char))
+  
+  // 모든 슬롯 채워졌는지 확인
+  const allFilled = b.cho && b.jung && (!hasJong || b.jong)
+  if (allFilled):
+    if (all correct):
+      handleSuccess() → playCorrect() + showReward() + 다음 라운드
+    else (하나라도 틀림):
+      handleFailure() → playIncorrect() + wrong-shake 애니메이션 + skipLesson()
+```
+
+**탭-탭 모드 (TapManager)**:
+- F12 구현: `tap.js` 에서 자모 버튼 탭 → 해당 카테고리(cho/jung/jong)의 빈 슬롯에 자동 배치
+- DragManager와 동시에 활성화 (드래그와 탭 모두 지원)
+- `tap.onPlaced = onJamoPlaced` 로 동일 검증 로직 공유
 
 ### 3.4 오디오 재생 (자동재생 정책)
 ```js
@@ -353,11 +401,17 @@ iOS Safari 미지원 → CSS `@media (orientation: portrait)` 로 회전 안내 
 > 플레이 화면은 이 게임 특유의 가로 모드·자모 블록 레이아웃을 사용한다.  
 > 시작·설정·완료 화면만 위 규격을 의무 준수한다.
 
+## 2.6 미구현 기능 (P1/P2)
+
+- **F15 리듬 모드**: 4/4박자 BGM + 비트 가중치 (M8 이후)
+- **F16 자모 범위 설정**: jamoFilter — 교사·부모용 부분집합 (M8 이후)
+- **F19 테마 선택**: 우주선/냄비/가마솥 토글 (현재 단일 테마 고정)
+
 ## 10. 미해결 기술 이슈
 
 - [ ] 자모 발음 사운드 소스 — 자체 녹음 vs 라이선스 음원 vs 합성 톤
 - [ ] 가로 잠금 미지원 환경(임베드 iframe) 폴백
-- [ ] 복합 모음(ㅘ, ㅝ)의 두 자소 결합 애니메이션 사양
-- [ ] 리듬 모드 BGM 라이선스 (CC0 검토)
+- [ ] 복합 모음(ㅘ, ㅝ, ㅞ, ㅢ)의 두 자소 결합 애니메이션 사양 (현재 가로형 처리로 단계 1 완료)
+- [ ] 리듬 모드 BGM 라이선스 (CC0 검토) — F15 구현 시
 - [ ] PWA 설치 프롬프트 노출 시점 (학습 1회 완료 후?)
 - [ ] iOS WebKit 의 Pointer Events 구현 차이로 인한 자성 거리 미세 조정
