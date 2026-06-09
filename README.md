@@ -1,3 +1,8 @@
+> [!IMPORTANT]
+> **이 저장소는 [`hangul_game`](https://github.com/littleanti/hangul_game) 모노레포로 통합되었습니다.**
+> 앞으로 모든 개발·유지보수는 모노레포에서 진행되며, 이 저장소는 보관(archive)용입니다.
+> 🎮 통합 플레이 사이트: https://littleanti.github.io/hangul_game/
+
 # 🧩 음절 조립소 (Syllable Assembly)
 
 흩어진 자모(초성·중성·종성)를 직접 조합해 한글 음절을 만드는 웹 기반 파닉스 게임입니다.
